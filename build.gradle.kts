@@ -5,8 +5,8 @@ plugins {
     application
 }
 
-group = "me.anitvam"
-version = "1.0-SNAPSHOT"
+group = "swc"
+version = "0.1.0"
 
 repositories {
     mavenCentral()
