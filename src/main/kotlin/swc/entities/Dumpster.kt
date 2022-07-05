@@ -11,15 +11,18 @@ class Dumpster private constructor(
     val occupiedVolume: Volume,
 ) {
     companion object {
-        fun from(capacity: Double, wasteName: WasteName) =
+        fun from(id: String, name: String, capacity: Double, wasteName: WasteName) =
             Dumpster(
-                id = UUID.randomUUID().toString(),
-                name = "Dumpster",
+                id = id,
+                name = name,
                 type = DumpsterType.from(capacity, wasteName),
                 isOpen = false,
                 isWorking = true,
-                occupiedVolume = Volume.empty()
+                occupiedVolume = Volume()
             )
+
+        fun from(capacity: Double, wasteName: WasteName) =
+            from(UUID.randomUUID().toString(), "Dumpster", capacity, wasteName)
     }
 
     override fun toString(): String =

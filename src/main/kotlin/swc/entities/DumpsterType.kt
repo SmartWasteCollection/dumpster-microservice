@@ -64,14 +64,8 @@ class TypeOfOrdinaryWaste private constructor(
 }
 
 data class Volume(
-    val value: Double
+    val value: Double = 0.0
 ) {
-    companion object {
-        private const val EMPTY_VALUE = 0.0
-
-        fun empty() = Volume(EMPTY_VALUE)
-    }
-
     init {
         require(value >= 0.0) { "A Volume value can not be a negative number" }
     }
