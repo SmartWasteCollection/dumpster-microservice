@@ -1,6 +1,7 @@
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 import swc.entities.Dimension
 import swc.entities.Dumpster
 import swc.entities.DumpsterType
@@ -17,8 +18,8 @@ class EntitiesTest : DescribeSpec({
             Volume(value).value shouldBe value
         }
 
-        it("can be initialized with the empty() factory") {
-            Volume.empty().value shouldBe 0.0
+        it("can be initialized with an empty value by default") {
+            Volume().value shouldBe 0.0
         }
 
         it("should throw IllegalArgumentException if initialized with a negative number") {
@@ -57,13 +58,27 @@ class EntitiesTest : DescribeSpec({
             glassType.wasteColor shouldBe WasteColor.GREEN
             glassType.wasteName shouldBe WasteName.GLASS
         }
+
+        it("should be equals to another TypeOfOrdinaryWaste with the same values") {
+            val type1 = TypeOfOrdinaryWaste.from(WasteName.PAPER)
+            val type2 = TypeOfOrdinaryWaste.from(WasteName.PAPER)
+
+            type1 shouldBe type2
+        }
+
+        it("should not be equals to another TypeOfOrdinaryWaste with different values") {
+            val type1 = TypeOfOrdinaryWaste.from(WasteName.PAPER)
+            val type2 = TypeOfOrdinaryWaste.from(WasteName.GLASS)
+
+            type1 shouldNotBe type2
+        }
     }
 
     describe("A Size") {
-        it("should be initialized specifying a capacity") {
-            val smallValue = 200.0
-            val bigValue = 800.0
+        val smallValue = 200.0
+        val bigValue = 800.0
 
+        it("should be initialized specifying a capacity") {
             val smallSize = Size.from(smallValue)
             smallSize.capacity shouldBe smallValue
             smallSize.dimension shouldBe Dimension.SMALL
@@ -86,11 +101,26 @@ class EntitiesTest : DescribeSpec({
             }
             exception.message shouldBe "A Size capacity must be a positive value"
         }
+
+        it("should be equals to another Size with the same value") {
+            val size1 = Size.from(smallValue)
+            val size2 = Size.from(smallValue)
+
+            size1 shouldBe size2
+        }
+
+        it("should not be equals to another Size with a different value") {
+            val size1 = Size.from(smallValue)
+            val size2 = Size.from(bigValue)
+
+            size1 shouldNotBe size2
+        }
     }
 
     describe("A DumpsterType") {
+        val value = 500.0
+
         it("should be initialized specifying a capacity and a WasteName") {
-            val value = 500.0
             val type = DumpsterType.from(value, WasteName.PAPER)
 
             type.size.capacity shouldBe value
@@ -98,17 +128,55 @@ class EntitiesTest : DescribeSpec({
             type.typeOfOrdinaryWaste.wasteColor shouldBe WasteColor.BLUE
             type.typeOfOrdinaryWaste.wasteName shouldBe WasteName.PAPER
         }
+
+        it("should be equals to another DumpsterType with same values") {
+            val type1 = DumpsterType.from(value, WasteName.PAPER)
+            val type2 = DumpsterType.from(value, WasteName.PAPER)
+
+            type1 shouldBe type2
+        }
+
+        it("should not be equals to another DumpsterType with different values") {
+            val type1 = DumpsterType.from(value, WasteName.PAPER)
+            val type2 = DumpsterType.from(value * 2, WasteName.PAPER)
+
+            type1 shouldNotBe type2
+        }
     }
 
     describe("A Dumpster") {
+        val value = 1500.0
+        val customId = "custom-id"
+        val customName = "custom-name"
+
         it("should be initialized specifying a capacity and a WasteName") {
-            val value = 1500.0
             val dumpster = Dumpster.from(value, WasteName.GLASS)
 
             dumpster.isOpen shouldBe false
             dumpster.isWorking shouldBe true
             dumpster.type shouldBe DumpsterType.from(value, WasteName.GLASS)
-            dumpster.occupiedVolume shouldBe Volume.empty()
+            dumpster.occupiedVolume shouldBe Volume()
+        }
+
+        it("should be initialized providing also id and name") {
+            val dumpster = Dumpster.from(customId, customName, value, WasteName.GLASS)
+
+            dumpster.name shouldBe customName
+            dumpster.id shouldBe customId
+        }
+
+        it("should be equal to another dumpster with the same id") {
+            val dumpster1 = Dumpster.from(customId, customName, value, WasteName.GLASS)
+            val dumpster2 = Dumpster.from(customId, customName, value, WasteName.GLASS)
+
+            dumpster1 shouldBe dumpster2
+        }
+
+        it("shouldn't be equal to another dumpster with a different id") {
+            val dumpster1 = Dumpster.from(value, WasteName.GLASS)
+            val dumpster2 = Dumpster.from(value, WasteName.GLASS)
+
+            dumpster1 shouldNotBe dumpster2
         }
     }
 })
