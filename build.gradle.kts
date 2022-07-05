@@ -1,7 +1,5 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
-    kotlin("jvm") version "1.5.10"
+    kotlin("jvm") version "1.7.0"
     id("org.springframework.boot") version "2.7.1"
     id("org.jlleitschuh.gradle.ktlint") version "10.3.0"
     id("org.jlleitschuh.gradle.ktlint-idea") version "10.3.0"
@@ -23,10 +21,6 @@ dependencies {
     implementation("com.azure:azure-identity:1.5.2")
     implementation("com.google.code.gson:gson:2.8.5")
     implementation("org.springframework.boot:spring-boot-starter-web:2.7.0")
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
 }
 
 application {
