@@ -186,5 +186,12 @@ class EntitiesTest : DescribeSpec({
             dumpster.occupiedVolume = Volume(value)
             dumpster.isAvailable() shouldBe false
         }
+
+        it("should be opened and closed") {
+            val dumpster = Dumpster.from(value, WasteName.PLASTIC_ALUMINIUM)
+            dumpster.isOpen shouldBe false
+            dumpster.isOpen = true
+            dumpster.isOpen shouldBe true
+        }
     }
 })
