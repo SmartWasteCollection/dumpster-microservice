@@ -6,9 +6,9 @@ class Dumpster private constructor(
     val id: String,
     val name: String,
     val type: DumpsterType,
-    val isOpen: Boolean,
-    val isWorking: Boolean,
-    val occupiedVolume: Volume,
+    val isOpen: Boolean = false,
+    val isWorking: Boolean = true,
+    val occupiedVolume: Volume = Volume(),
 ) {
     companion object {
         fun from(id: String, name: String, capacity: Double, wasteName: WasteName) =
@@ -16,9 +16,6 @@ class Dumpster private constructor(
                 id = id,
                 name = name,
                 type = DumpsterType.from(capacity, wasteName),
-                isOpen = false,
-                isWorking = true,
-                occupiedVolume = Volume()
             )
 
         fun from(capacity: Double, wasteName: WasteName) =
