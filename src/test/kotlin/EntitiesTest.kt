@@ -147,7 +147,6 @@ class EntitiesTest : DescribeSpec({
     describe("A Dumpster") {
         val value = 1500.0
         val customId = "custom-id"
-        val customName = "custom-name"
 
         it("should be initialized specifying a capacity and a WasteName") {
             val dumpster = Dumpster.from(value, WasteName.GLASS)
@@ -159,15 +158,14 @@ class EntitiesTest : DescribeSpec({
         }
 
         it("should be initialized providing also id and name") {
-            val dumpster = Dumpster.from(customId, customName, value, WasteName.GLASS)
+            val dumpster = Dumpster.from(customId, value, WasteName.GLASS)
 
-            dumpster.name shouldBe customName
             dumpster.id shouldBe customId
         }
 
         it("should be equal to another dumpster with the same id") {
-            val dumpster1 = Dumpster.from(customId, customName, value, WasteName.GLASS)
-            val dumpster2 = Dumpster.from(customId, customName, value, WasteName.GLASS)
+            val dumpster1 = Dumpster.from(customId, value, WasteName.GLASS)
+            val dumpster2 = Dumpster.from(customId, value, WasteName.GLASS)
 
             dumpster1 shouldBe dumpster2
         }
