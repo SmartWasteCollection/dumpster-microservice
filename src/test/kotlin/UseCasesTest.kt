@@ -62,9 +62,6 @@ class UseCasesTest : DescribeSpec({
     describe("GetDumpstersUseCase") {
         it("should return the same number of instances in Azure Platform") {
             val dumpsters = GetDumpstersUseCase().execute()
-            println()
-            dumpsters.forEach { println(it) }
-            println()
             val count = AzureAuthentication.authClient.query(AzureQueries.GET_DUMPSTERS_COUNT, String::class.java).first()
 
             dumpsters.size shouldBe DumpsterDeserialization.parse(count)["COUNT"].asInt
