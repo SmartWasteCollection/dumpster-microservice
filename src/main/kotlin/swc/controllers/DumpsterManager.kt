@@ -10,13 +10,10 @@ import swc.entities.Dumpster
 
 object DumpsterManager : Manager {
 
-    override fun getDumpsters(): List<Dumpster> {
-        val res = AzureAuthentication.authClient.query(AzureQueries.GET_ALL_DUMPSTERS_QUERY, String::class.java)
-        println("--------------------------")
-        println(res)
-        println("--------------------------")
-        return res.map { DumpsterDeserialization.parse(it).toDumpster() }
-    }
+    override fun getDumpsters(): List<Dumpster> = AzureAuthentication.authClient
+        .query(AzureQueries.GET_ALL_DUMPSTERS_QUERY, String::class.java)
+        .map { DumpsterDeserialization.parse(it).toDumpster() }
+
     @Throws(NoSuchElementException::class)
     override fun getDumpsterById(id: String): Dumpster {
         val response: String
