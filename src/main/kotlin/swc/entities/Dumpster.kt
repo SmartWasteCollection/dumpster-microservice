@@ -6,7 +6,7 @@ data class Dumpster(
     val id: String = UUID.randomUUID().toString(),
     val type: DumpsterType,
     var isOpen: Boolean = false,
-    val isWorking: Boolean = true,
+    var isWorking: Boolean = true,
     var occupiedVolume: Volume = Volume(),
 ) {
     companion object {
