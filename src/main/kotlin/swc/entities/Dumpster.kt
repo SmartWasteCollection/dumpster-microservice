@@ -5,12 +5,17 @@ import java.util.UUID
 data class Dumpster(
     val id: String = UUID.randomUUID().toString(),
     val type: DumpsterType,
-    val isOpen: Boolean = false,
+    var isOpen: Boolean = false,
     val isWorking: Boolean = true,
-    val occupiedVolume: Volume = Volume(),
+    var occupiedVolume: Volume = Volume(),
 ) {
     companion object {
+        const val CAPACITY_THRESHOLD = 95
+        const val TIMEOUT = 30
+
         fun from(capacity: Double, wasteName: WasteName) = Dumpster(type = DumpsterType.from(capacity, wasteName))
         fun from(id: String, capacity: Double, wasteName: WasteName) = Dumpster(id = id, type = DumpsterType.from(capacity, wasteName))
     }
+
+    fun isAvailable(): Boolean = isWorking && occupiedVolume.getOccupiedPercentage(type.size.capacity) < CAPACITY_THRESHOLD
 }

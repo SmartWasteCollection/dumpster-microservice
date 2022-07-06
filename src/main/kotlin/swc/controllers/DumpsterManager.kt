@@ -38,5 +38,4 @@ object DumpsterManager : Manager {
         dumpster.id,
         JsonPatchDocument().appendReplace("/Open", true),
     )
-
 }
