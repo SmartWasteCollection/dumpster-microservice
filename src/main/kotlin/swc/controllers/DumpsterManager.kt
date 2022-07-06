@@ -1,5 +1,6 @@
 package swc.controllers
 
+import com.azure.core.models.JsonPatchDocument
 import com.azure.digitaltwins.core.implementation.models.ErrorResponseException
 import swc.adapters.DumpsterDeserialization
 import swc.adapters.DumpsterDeserialization.toDumpster
@@ -27,6 +28,15 @@ object DumpsterManager : Manager {
         return DumpsterDeserialization.parse(response).toDumpster()
     }
 
-    override fun createDumpster(dumpster: Dumpster): String = AzureAuthentication.authClient
-        .createOrReplaceDigitalTwin(dumpster.id, dumpster.toJson().toString(), String::class.java)
+    override fun createDumpster(dumpster: Dumpster): String = AzureAuthentication.authClient.createOrReplaceDigitalTwin(
+        dumpster.id,
+        dumpster.toJson().toString(),
+        String::class.java,
+    )
+
+    override fun openDumpster(dumpster: Dumpster) = AzureAuthentication.authClient.updateDigitalTwin(
+        dumpster.id,
+        JsonPatchDocument().appendReplace("/Open", true),
+    )
+
 }

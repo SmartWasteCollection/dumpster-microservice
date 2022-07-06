@@ -5,9 +5,11 @@ import swc.adapters.DumpsterDeserialization
 import swc.adapters.DumpsterDeserialization.toDumpster
 import swc.controllers.errors.DumpsterNotFoundException
 import swc.entities.Dumpster
+import swc.entities.Volume
 import swc.entities.WasteName
 import swc.usecases.CreateDumpsterUseCase
 import swc.usecases.GetDumpsterByIdUseCase
+import swc.usecases.OpenDumpsterUseCase
 
 class UseCasesTest : DescribeSpec({
     describe("A GetDumpsterByIdUseCase") {
@@ -28,6 +30,28 @@ class UseCasesTest : DescribeSpec({
 
             val remoteDumpster = GetDumpsterByIdUseCase(dumpster.id).execute()
             remoteDumpster shouldBe dumpster
+        }
+    }
+
+    describe("A OpenDumpsterUseCase") {
+        it("should modify the Open property of an available dumpster on Azure Platform") {
+            val dumpster = Dumpster.from(500.0, WasteName.ORGANIC)
+            val res = CreateDumpsterUseCase(dumpster).execute()
+            DumpsterDeserialization.parse(res).toDumpster().isOpen shouldBe false
+
+            OpenDumpsterUseCase(dumpster.id).execute()
+            val remoteDumpster = GetDumpsterByIdUseCase(dumpster.id).execute()
+            remoteDumpster.isOpen shouldBe true
+        }
+
+        it("should not modify the Open property of a non-available dumpster on Azure Platform") {
+            val dumpster = Dumpster.from(500.0, WasteName.ORGANIC)
+            dumpster.occupiedVolume = Volume(499.0)
+            CreateDumpsterUseCase(dumpster).execute()
+
+            OpenDumpsterUseCase(dumpster.id).execute()
+            val remoteDumpster = GetDumpsterByIdUseCase(dumpster.id).execute()
+            remoteDumpster.isOpen shouldBe false
         }
     }
 })
