@@ -7,4 +7,5 @@ interface Manager {
     fun getDumpsterById(id: String): Dumpster
     fun createDumpster(dumpster: Dumpster): String
     fun openDumpster(dumpster: Dumpster)
+    fun deleteDumpster(id: String)
 }
