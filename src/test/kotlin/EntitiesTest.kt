@@ -176,5 +176,15 @@ class EntitiesTest : DescribeSpec({
 
             dumpster1 shouldNotBe dumpster2
         }
+
+        it("should be properly available depending on its occupiedVolume") {
+            val dumpster = Dumpster.from(value, WasteName.UNSORTED)
+            dumpster.isAvailable() shouldBe true
+            dumpster.isWorking = false
+            dumpster.isAvailable() shouldBe false
+            dumpster.isWorking = true
+            dumpster.occupiedVolume = Volume(value)
+            dumpster.isAvailable() shouldBe false
+        }
     }
 })
