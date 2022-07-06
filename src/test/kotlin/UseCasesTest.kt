@@ -11,6 +11,7 @@ import swc.entities.Dumpster
 import swc.entities.Volume
 import swc.entities.WasteName
 import swc.usecases.CreateDumpsterUseCase
+import swc.usecases.DeleteDumpsterUseCase
 import swc.usecases.GetDumpsterByIdUseCase
 import swc.usecases.GetDumpstersUseCase
 import swc.usecases.OpenDumpsterUseCase
@@ -34,6 +35,8 @@ class UseCasesTest : DescribeSpec({
 
             val remoteDumpster = GetDumpsterByIdUseCase(dumpster.id).execute()
             remoteDumpster shouldBe dumpster
+
+            DeleteDumpsterUseCase(dumpster.id).execute()
         }
     }
 
@@ -46,6 +49,8 @@ class UseCasesTest : DescribeSpec({
             OpenDumpsterUseCase(dumpster.id).execute()
             val remoteDumpster = GetDumpsterByIdUseCase(dumpster.id).execute()
             remoteDumpster.isOpen shouldBe true
+
+            DeleteDumpsterUseCase(dumpster.id).execute()
         }
 
         it("should not modify the Open property of a non-available dumpster on Azure Platform") {
@@ -56,6 +61,8 @@ class UseCasesTest : DescribeSpec({
             OpenDumpsterUseCase(dumpster.id).execute()
             val remoteDumpster = GetDumpsterByIdUseCase(dumpster.id).execute()
             remoteDumpster.isOpen shouldBe false
+
+            DeleteDumpsterUseCase(dumpster.id).execute()
         }
     }
 
@@ -65,6 +72,21 @@ class UseCasesTest : DescribeSpec({
             val count = AzureAuthentication.authClient.query(AzureQueries.GET_DUMPSTERS_COUNT, String::class.java).first()
 
             dumpsters.size shouldBe DumpsterDeserialization.parse(count)["COUNT"].asInt
+        }
+    }
+
+    describe("DeleteDumpsterUseCase") {
+        it("should delete the desired digital twin from Azure Platform") {
+            val dumpster = Dumpster.from(500.0, WasteName.ORGANIC)
+            CreateDumpsterUseCase(dumpster).execute()
+            val res = GetDumpsterByIdUseCase(dumpster.id).execute()
+            res shouldBe dumpster
+
+            DeleteDumpsterUseCase(dumpster.id).execute()
+            val exception = shouldThrow<DumpsterNotFoundException> {
+                GetDumpsterByIdUseCase(dumpster.id).execute()
+            }
+            exception.message shouldBe "Dumpster with id ${dumpster.id} not found"
         }
     }
 })

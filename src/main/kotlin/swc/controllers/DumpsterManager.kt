@@ -38,4 +38,6 @@ object DumpsterManager : Manager {
         dumpster.id,
         JsonPatchDocument().appendReplace("/Open", true),
     )
+
+    override fun deleteDumpster(id: String) = AzureAuthentication.authClient.deleteDigitalTwin(id)
 }
