@@ -50,7 +50,7 @@ object DumpsterSerialization {
 object DumpsterDeserialization {
     fun JsonObject.toDumpster() = Dumpster(
         this["${'$'}dtId"].asString,
-        this.toDumpsterType(),
+        this.getAsJsonObject("DumpsterType").toDumpsterType(),
         this["Open"].asBoolean,
         this["Working"].asBoolean,
         this.toVolume()
@@ -59,20 +59,20 @@ object DumpsterDeserialization {
     fun parse(json: String): JsonObject = JsonParser().parse(json).asJsonObject
 
     private fun JsonObject.toSize() = Size.from(
-        this.getAsJsonObject("DumpsterType")
-            .getAsJsonObject("Size")
-            .getAsJsonPrimitive("Capacity")
+        this.getAsJsonPrimitive("Capacity")
             .asDouble
     )
 
     private fun JsonObject.toWasteName() = WasteName.valueOf(
-        this.getAsJsonObject("DumpsterType")
-            .getAsJsonObject("TypeOfOrdinaryWaste")
+        this.getAsJsonObject("TypeOfOrdinaryWaste")
             .getAsJsonPrimitive("WasteName")
             .asString
     )
 
     private fun JsonObject.toVolume() = Volume(this["OccupiedVolume"].asDouble)
 
-    private fun JsonObject.toDumpsterType() = DumpsterType.from(this.toSize().capacity, this.toWasteName())
+    private fun JsonObject.toDumpsterType() = DumpsterType.from(
+        this.getAsJsonObject("Size").toSize().capacity,
+        this.toWasteName()
+    )
 }
