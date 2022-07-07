@@ -1,11 +1,13 @@
 package swc.controllers
 
+import swc.entities.CollectionPoint
 import swc.entities.Dumpster
 
 interface Manager {
     fun getDumpsters(): List<Dumpster>
     fun getDumpsterById(id: String): Dumpster
     fun createDumpster(dumpster: Dumpster): Dumpster
+    fun createCollectionPoint(collectionPoint: CollectionPoint): CollectionPoint
     fun openDumpster(id: String)
     fun closeDumpster(id: String)
     fun deleteDumpster(id: String)
