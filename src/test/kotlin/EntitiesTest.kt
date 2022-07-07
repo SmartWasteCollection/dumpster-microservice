@@ -147,7 +147,6 @@ class EntitiesTest : DescribeSpec({
     describe("A Dumpster") {
         val value = 1500.0
         val customId = "custom-id"
-        val customName = "custom-name"
 
         it("should be initialized specifying a capacity and a WasteName") {
             val dumpster = Dumpster.from(value, WasteName.GLASS)
@@ -159,15 +158,14 @@ class EntitiesTest : DescribeSpec({
         }
 
         it("should be initialized providing also id and name") {
-            val dumpster = Dumpster.from(customId, customName, value, WasteName.GLASS)
+            val dumpster = Dumpster.from(customId, value, WasteName.GLASS)
 
-            dumpster.name shouldBe customName
             dumpster.id shouldBe customId
         }
 
         it("should be equal to another dumpster with the same id") {
-            val dumpster1 = Dumpster.from(customId, customName, value, WasteName.GLASS)
-            val dumpster2 = Dumpster.from(customId, customName, value, WasteName.GLASS)
+            val dumpster1 = Dumpster.from(customId, value, WasteName.GLASS)
+            val dumpster2 = Dumpster.from(customId, value, WasteName.GLASS)
 
             dumpster1 shouldBe dumpster2
         }
@@ -177,6 +175,23 @@ class EntitiesTest : DescribeSpec({
             val dumpster2 = Dumpster.from(value, WasteName.GLASS)
 
             dumpster1 shouldNotBe dumpster2
+        }
+
+        it("should be properly available depending on its occupiedVolume") {
+            val dumpster = Dumpster.from(value, WasteName.UNSORTED)
+            dumpster.isAvailable() shouldBe true
+            dumpster.isWorking = false
+            dumpster.isAvailable() shouldBe false
+            dumpster.isWorking = true
+            dumpster.occupiedVolume = Volume(value)
+            dumpster.isAvailable() shouldBe false
+        }
+
+        it("should be opened and closed") {
+            val dumpster = Dumpster.from(value, WasteName.PLASTIC_ALUMINIUM)
+            dumpster.isOpen shouldBe false
+            dumpster.isOpen = true
+            dumpster.isOpen shouldBe true
         }
     }
 })
