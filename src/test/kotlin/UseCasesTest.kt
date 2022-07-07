@@ -16,6 +16,7 @@ import swc.usecases.CreateDumpsterUseCase
 import swc.usecases.DeleteDumpsterUseCase
 import swc.usecases.GetDumpsterByIdUseCase
 import swc.usecases.GetDumpstersUseCase
+import swc.usecases.OpenDumpsterUseCase
 import swc.usecases.UpdateDumpsterVolumeUseCase
 import kotlin.time.Duration.Companion.milliseconds
 
