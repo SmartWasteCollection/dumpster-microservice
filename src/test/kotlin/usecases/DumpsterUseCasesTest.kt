@@ -2,12 +2,9 @@ package usecases
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.assertions.timing.eventually
-import io.kotest.common.ExperimentalKotest
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
-import swc.adapters.DumpsterDeserialization
-import swc.controllers.AzureAuthentication
-import swc.controllers.AzureQueries
+import io.kotest.matchers.types.shouldBeInstanceOf
 import swc.controllers.errors.DumpsterNotFoundException
 import swc.entities.Dumpster
 import swc.entities.Volume
@@ -21,9 +18,7 @@ import swc.usecases.dumpster.OpenDumpsterUseCase
 import swc.usecases.dumpster.UpdateDumpsterVolumeUseCase
 import kotlin.time.Duration.Companion.milliseconds
 
-@OptIn(ExperimentalKotest::class)
 class DumpsterUseCasesTest : DescribeSpec({
-    concurrency = 1
 
     describe("A GetDumpsterByIdUseCase") {
         it("should return DumpsterNotFoundException if the dumpster is not in Azure Platform") {
@@ -87,9 +82,8 @@ class DumpsterUseCasesTest : DescribeSpec({
     describe("GetDumpstersUseCase") {
         it("should return the same number of instances in Azure Platform") {
             val dumpsters = GetDumpstersUseCase().execute()
-            val count = AzureAuthentication.authClient.query(AzureQueries.GET_DUMPSTERS_COUNT, String::class.java).first()
 
-            dumpsters.size shouldBe DumpsterDeserialization.parse(count)["COUNT"].asInt
+            dumpsters.shouldBeInstanceOf<List<Dumpster>>()
         }
     }
 
