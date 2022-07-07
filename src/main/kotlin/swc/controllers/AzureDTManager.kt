@@ -2,14 +2,17 @@ package swc.controllers
 
 import com.azure.core.models.JsonPatchDocument
 import com.azure.digitaltwins.core.implementation.models.ErrorResponseException
+import swc.adapters.CollectionPointsDeserialization.toCollectionPoint
+import swc.adapters.CollectionPointsSerialization.toJson
 import swc.adapters.DumpsterDeserialization.parse
 import swc.adapters.DumpsterDeserialization.toDumpster
 import swc.adapters.DumpsterSerialization.toJson
 import swc.controllers.errors.DumpsterNotFoundException
+import swc.entities.CollectionPoint
 import swc.entities.Dumpster
 import java.util.concurrent.Executors
 
-object DumpsterManager : Manager {
+object AzureDTManager : Manager {
 
     override fun getDumpsters() = AzureAuthentication.authClient
         .query(AzureQueries.GET_ALL_DUMPSTERS_QUERY, String::class.java)
@@ -29,15 +32,11 @@ object DumpsterManager : Manager {
         return parse(response).toDumpster()
     }
 
-    override fun createDumpster(dumpster: Dumpster): Dumpster {
-        val dt = AzureAuthentication.authClient.createOrReplaceDigitalTwin(
-            dumpster.id,
-            dumpster.toJson().toString(),
-            String::class.java,
-        )
+    override fun createDumpster(dumpster: Dumpster) =
+        parse(createDigitalTwin(dumpster.id, dumpster.toJson().toString())).toDumpster()
 
-        return parse(dt).toDumpster()
-    }
+    override fun createCollectionPoint(collectionPoint: CollectionPoint) =
+        parse(createDigitalTwin(collectionPoint.id, collectionPoint.toJson().toString())).toCollectionPoint()
 
     override fun openDumpster(id: String) = updateDigitalTwin(id, "/Open", true)
 
@@ -55,8 +54,9 @@ object DumpsterManager : Manager {
 
     override fun updateVolume(id: String, newVolume: Double) = updateDigitalTwin(id, "/OccupiedVolume", newVolume)
 
-    private fun updateDigitalTwin(id: String, path: String, newValue: Any) = AzureAuthentication.authClient.updateDigitalTwin(
-        id,
-        JsonPatchDocument().appendReplace(path, newValue),
-    )
+    private fun updateDigitalTwin(id: String, path: String, newValue: Any) =
+        AzureAuthentication.authClient.updateDigitalTwin(id, JsonPatchDocument().appendReplace(path, newValue))
+
+    private fun createDigitalTwin(id: String, dtDescription: String) =
+        AzureAuthentication.authClient.createOrReplaceDigitalTwin(id, dtDescription, String::class.java)
 }

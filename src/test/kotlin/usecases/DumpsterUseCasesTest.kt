@@ -1,3 +1,5 @@
+package usecases
+
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.assertions.timing.eventually
 import io.kotest.common.ExperimentalKotest
@@ -20,7 +22,7 @@ import swc.usecases.dumpster.UpdateDumpsterVolumeUseCase
 import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalKotest::class)
-class UseCasesTest : DescribeSpec({
+class DumpsterUseCasesTest : DescribeSpec({
     concurrency = 1
 
     describe("A GetDumpsterByIdUseCase") {
