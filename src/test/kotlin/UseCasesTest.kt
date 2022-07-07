@@ -4,7 +4,6 @@ import io.kotest.common.ExperimentalKotest
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import swc.adapters.DumpsterDeserialization
-import swc.adapters.DumpsterDeserialization.toDumpster
 import swc.controllers.AzureAuthentication
 import swc.controllers.AzureQueries
 import swc.controllers.errors.DumpsterNotFoundException
@@ -38,10 +37,7 @@ class UseCasesTest : DescribeSpec({
             val dumpster = Dumpster.from(500.0, WasteName.ORGANIC)
 
             val res = CreateDumpsterUseCase(dumpster).execute()
-            DumpsterDeserialization.parse(res).toDumpster() shouldBe dumpster
-
-            val remoteDumpster = GetDumpsterByIdUseCase(dumpster.id).execute()
-            remoteDumpster shouldBe dumpster
+            res shouldBe dumpster
 
             DeleteDumpsterUseCase(dumpster.id).execute()
         }
@@ -51,7 +47,7 @@ class UseCasesTest : DescribeSpec({
         it("should modify the Open property of an available dumpster on Azure Platform") {
             val dumpster = Dumpster.from(500.0, WasteName.ORGANIC)
             val res = CreateDumpsterUseCase(dumpster).execute()
-            DumpsterDeserialization.parse(res).toDumpster().isOpen shouldBe false
+            res.isOpen shouldBe false
 
             OpenDumpsterUseCase(dumpster.id).execute()
             val remoteDumpster = GetDumpsterByIdUseCase(dumpster.id).execute()
