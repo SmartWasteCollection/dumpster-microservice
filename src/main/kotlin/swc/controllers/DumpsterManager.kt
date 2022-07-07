@@ -9,6 +9,7 @@ import swc.controllers.DumpsterManager.createDumpster
 import swc.controllers.errors.DumpsterNotFoundException
 import swc.entities.Dumpster
 import swc.entities.WasteName
+import java.util.Objects
 import java.util.concurrent.Executors
 
 object DumpsterManager : Manager {
@@ -19,7 +20,6 @@ object DumpsterManager : Manager {
 
     @Throws(NoSuchElementException::class)
     override fun getDumpsterById(id: String): Dumpster {
-        println("------------------------------------------------------------------------------------------REQUIRED: $id")
         val response: String
         try {
             response = AzureAuthentication.authClient.getDigitalTwin(id, String::class.java)
@@ -42,15 +42,9 @@ object DumpsterManager : Manager {
         return parse(dt).toDumpster()
     }
 
-    override fun openDumpster(id: String) = AzureAuthentication.authClient.updateDigitalTwin(
-        id,
-        JsonPatchDocument().appendReplace("/Open", true),
-    )
+    override fun openDumpster(id: String) = updateDigitalTwin(id, "/Open", true)
 
-    override fun closeDumpster(id: String) = AzureAuthentication.authClient.updateDigitalTwin(
-        id,
-        JsonPatchDocument().appendReplace("/Open", false),
-    )
+    override fun closeDumpster(id: String) = updateDigitalTwin(id, "/Open", false)
 
     override fun deleteDumpster(id: String) = AzureAuthentication.authClient.deleteDigitalTwin(id)
 
@@ -62,16 +56,10 @@ object DumpsterManager : Manager {
         }
     }
 
-    override fun updateVolume(id: String, newVolume: Double) = AzureAuthentication.authClient.updateDigitalTwin(
-        id,
-        JsonPatchDocument().appendReplace("/OccupiedVolume", newVolume),
-    )
-}
+    override fun updateVolume(id: String, newVolume: Double) = updateDigitalTwin(id, "/OccupiedVolume", newVolume)
 
-fun main() {
-    val dump = Dumpster.from(1450.0, WasteName.PAPER)
-    val res = createDumpster(dump)
-    println("------------")
-    println(res)
-    println("------------")
+    private fun updateDigitalTwin(id: String, path: String, newValue: Any) = AzureAuthentication.authClient.updateDigitalTwin(
+        id,
+        JsonPatchDocument().appendReplace(path, newValue),
+    )
 }
