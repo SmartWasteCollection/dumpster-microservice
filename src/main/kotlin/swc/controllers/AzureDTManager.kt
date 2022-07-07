@@ -1,12 +1,14 @@
 package swc.controllers
 
 import com.azure.core.models.JsonPatchDocument
+import com.azure.digitaltwins.core.BasicRelationship
 import com.azure.digitaltwins.core.implementation.models.ErrorResponseException
 import swc.adapters.CollectionPointsDeserialization.toCollectionPoint
 import swc.adapters.CollectionPointsSerialization.toJson
 import swc.adapters.DumpsterDeserialization.parse
 import swc.adapters.DumpsterDeserialization.toDumpster
 import swc.adapters.DumpsterSerialization.toJson
+import swc.controllers.errors.CollectionPointNotFoundException
 import swc.controllers.errors.DumpsterNotFoundException
 import swc.entities.CollectionPoint
 import swc.entities.Dumpster
@@ -18,22 +20,25 @@ object AzureDTManager : Manager {
         .query(AzureQueries.GET_ALL_DUMPSTERS_QUERY, String::class.java)
         .map { parse(it).toDumpster() }
 
-    @Throws(NoSuchElementException::class)
-    override fun getDumpsterById(id: String): Dumpster {
-        val response: String
-        try {
-            response = AzureAuthentication.authClient.getDigitalTwin(id, String::class.java)
-        } catch (e: ErrorResponseException) {
-            when (e.response.statusCode) {
-                404 -> throw DumpsterNotFoundException("Dumpster with id $id not found")
-                else -> error { e.printStackTrace() }
-            }
-        }
-        return parse(response).toDumpster()
-    }
+    @Throws(DumpsterNotFoundException::class)
+    override fun getDumpsterById(id: String) =
+        parse(getDigitalTwinById(id, DumpsterNotFoundException("Dumpster with id $id not found"))).toDumpster()
 
-    override fun createDumpster(dumpster: Dumpster) =
-        parse(createDigitalTwin(dumpster.id, dumpster.toJson().toString())).toDumpster()
+    @Throws(CollectionPointNotFoundException::class)
+    override fun getCollectionPointById(id: String) =
+        parse(getDigitalTwinById(id, CollectionPointNotFoundException("CollectionPoint with id $id not found"))).toCollectionPoint()
+
+    override fun createDumpster(dumpster: Dumpster, collectionPoint: CollectionPoint): Dumpster {
+        val createdDumpster = createDigitalTwin(dumpster.id, dumpster.toJson().toString())
+        val relationship = AzureDTRelationshipFactory.from(collectionPoint, dumpster)
+        AzureAuthentication.authClient.createOrReplaceRelationship(
+            collectionPoint.id,
+            relationship.id,
+            relationship,
+            BasicRelationship::class.java
+        )
+        return parse(createdDumpster).toDumpster()
+    }
 
     override fun createCollectionPoint(collectionPoint: CollectionPoint) =
         parse(createDigitalTwin(collectionPoint.id, collectionPoint.toJson().toString())).toCollectionPoint()
@@ -42,7 +47,13 @@ object AzureDTManager : Manager {
 
     override fun closeDumpster(id: String) = updateDigitalTwin(id, "/Open", false)
 
-    override fun deleteDumpster(id: String) = AzureAuthentication.authClient.deleteDigitalTwin(id)
+    override fun deleteDumpster(id: String) {
+        AzureAuthentication.authClient.listIncomingRelationships(id).forEach {
+            AzureAuthentication.authClient.deleteRelationship(it.sourceId, it.relationshipId)
+        }
+        deleteDigitalTwin(id)
+    }
+    override fun deleteCollectionPoint(id: String) = deleteDigitalTwin(id)
 
     override fun closeAfterTimeout(id: String, timeout: Long) {
         val executor = Executors.newSingleThreadExecutor()
@@ -54,9 +65,23 @@ object AzureDTManager : Manager {
 
     override fun updateVolume(id: String, newVolume: Double) = updateDigitalTwin(id, "/OccupiedVolume", newVolume)
 
+    private fun deleteDigitalTwin(id: String) = AzureAuthentication.authClient.deleteDigitalTwin(id)
     private fun updateDigitalTwin(id: String, path: String, newValue: Any) =
         AzureAuthentication.authClient.updateDigitalTwin(id, JsonPatchDocument().appendReplace(path, newValue))
 
     private fun createDigitalTwin(id: String, dtDescription: String) =
         AzureAuthentication.authClient.createOrReplaceDigitalTwin(id, dtDescription, String::class.java)
+
+    private fun getDigitalTwinById(id: String, exception: Exception): String {
+        val response: String
+        try {
+            response = AzureAuthentication.authClient.getDigitalTwin(id, String::class.java)
+        } catch (e: ErrorResponseException) {
+            when (e.response.statusCode) {
+                404 -> throw exception
+                else -> error { e.printStackTrace() }
+            }
+        }
+        return response
+    }
 }
