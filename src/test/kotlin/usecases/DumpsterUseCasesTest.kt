@@ -6,9 +6,13 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import swc.controllers.errors.DumpsterNotFoundException
+import swc.entities.CollectionPoint
 import swc.entities.Dumpster
+import swc.entities.Position
 import swc.entities.Volume
 import swc.entities.WasteName
+import swc.usecases.collectionpoint.CreateCollectionPointUseCase
+import swc.usecases.collectionpoint.DeleteCollectionPointUseCase
 import swc.usecases.dumpster.CloseDumpsterUseCase
 import swc.usecases.dumpster.CreateDumpsterUseCase
 import swc.usecases.dumpster.DeleteDumpsterUseCase
@@ -19,6 +23,11 @@ import swc.usecases.dumpster.UpdateDumpsterVolumeUseCase
 import kotlin.time.Duration.Companion.milliseconds
 
 class DumpsterUseCasesTest : DescribeSpec({
+
+    fun deleteInstances(dumpster: Dumpster, collectionPoint: CollectionPoint) {
+        DeleteDumpsterUseCase(dumpster.id).execute()
+        DeleteCollectionPointUseCase(collectionPoint.id).execute()
+    }
 
     describe("A GetDumpsterByIdUseCase") {
         it("should return DumpsterNotFoundException if the dumpster is not in Azure Platform") {
@@ -32,49 +41,55 @@ class DumpsterUseCasesTest : DescribeSpec({
     describe("A CreateDumpsterUseCase") {
         it("should create a new dumpster digital twin") {
             val dumpster = Dumpster.from(500.0, WasteName.ORGANIC)
+            val cp = CollectionPoint(position = Position(0L, 0L))
 
-            val res = CreateDumpsterUseCase(dumpster).execute()
-            res shouldBe dumpster
+            CreateCollectionPointUseCase(cp).execute()
+            CreateDumpsterUseCase(dumpster, cp).execute() shouldBe dumpster
 
-            DeleteDumpsterUseCase(dumpster.id).execute()
+            deleteInstances(dumpster, cp)
         }
     }
 
     describe("A OpenDumpsterUseCase") {
         it("should modify the Open property of an available dumpster on Azure Platform") {
             val dumpster = Dumpster.from(500.0, WasteName.ORGANIC)
-            val res = CreateDumpsterUseCase(dumpster).execute()
+            val cp = CollectionPoint(position = Position(0L, 0L))
+
+            CreateCollectionPointUseCase(cp).execute()
+            val res = CreateDumpsterUseCase(dumpster, cp).execute()
             res.isOpen shouldBe false
 
-            OpenDumpsterUseCase(dumpster.id).execute()
-            val remoteDumpster = GetDumpsterByIdUseCase(dumpster.id).execute()
-            remoteDumpster.isOpen shouldBe true
+            OpenDumpsterUseCase(dumpster.id).execute().isOpen shouldBe true
 
-            DeleteDumpsterUseCase(dumpster.id).execute()
+            deleteInstances(dumpster, cp)
         }
 
         it("should not modify the Open property of a non-available dumpster on Azure Platform") {
             val dumpster = Dumpster.from(500.0, WasteName.ORGANIC)
             dumpster.occupiedVolume = Volume(499.0)
-            CreateDumpsterUseCase(dumpster).execute()
+            val cp = CollectionPoint(position = Position(0L, 0L))
 
-            OpenDumpsterUseCase(dumpster.id).execute()
-            val remoteDumpster = GetDumpsterByIdUseCase(dumpster.id).execute()
-            remoteDumpster.isOpen shouldBe false
+            CreateCollectionPointUseCase(cp).execute()
+            CreateDumpsterUseCase(dumpster, cp).execute()
 
-            DeleteDumpsterUseCase(dumpster.id).execute()
+            OpenDumpsterUseCase(dumpster.id).execute().isOpen shouldBe false
+
+            deleteInstances(dumpster, cp)
         }
 
         it("should close the dumpster after timeout") {
             val timeout: Long = 5000
             val dumpster = Dumpster.from(1450.0, WasteName.PAPER)
-            CreateDumpsterUseCase(dumpster).execute()
+            val cp = CollectionPoint(position = Position(0L, 0L))
+
+            CreateCollectionPointUseCase(cp).execute()
+            CreateDumpsterUseCase(dumpster, cp).execute()
             OpenDumpsterUseCase(dumpster.id, timeout).execute()
             GetDumpsterByIdUseCase(dumpster.id).execute().isOpen shouldBe true
 
             eventually((timeout + 1000).milliseconds) {
                 GetDumpsterByIdUseCase(dumpster.id).execute().isOpen shouldBe false
-                DeleteDumpsterUseCase(dumpster.id).execute()
+                deleteInstances(dumpster, cp)
             }
         }
     }
@@ -90,11 +105,12 @@ class DumpsterUseCasesTest : DescribeSpec({
     describe("DeleteDumpsterUseCase") {
         it("should delete the desired digital twin from Azure Platform") {
             val dumpster = Dumpster.from(500.0, WasteName.ORGANIC)
-            CreateDumpsterUseCase(dumpster).execute()
-            val res = GetDumpsterByIdUseCase(dumpster.id).execute()
-            res shouldBe dumpster
+            val cp = CollectionPoint(position = Position(0L, 0L))
 
-            DeleteDumpsterUseCase(dumpster.id).execute()
+            CreateCollectionPointUseCase(cp).execute()
+            CreateDumpsterUseCase(dumpster, cp).execute() shouldBe dumpster
+
+            deleteInstances(dumpster, cp)
             val exception = shouldThrow<DumpsterNotFoundException> {
                 GetDumpsterByIdUseCase(dumpster.id).execute()
             }
@@ -106,12 +122,15 @@ class DumpsterUseCasesTest : DescribeSpec({
         it("should close the dumpster") {
             val dumpster = Dumpster.from(1450.0, WasteName.PAPER)
             dumpster.isOpen = true
-            CreateDumpsterUseCase(dumpster).execute()
+            val cp = CollectionPoint(position = Position(0L, 0L))
+
+            CreateCollectionPointUseCase(cp).execute()
+            CreateDumpsterUseCase(dumpster, cp).execute()
             CloseDumpsterUseCase(dumpster.id).execute()
 
             GetDumpsterByIdUseCase(dumpster.id).execute().isOpen shouldBe false
 
-            DeleteDumpsterUseCase(dumpster.id).execute()
+            deleteInstances(dumpster, cp)
         }
     }
 
@@ -119,12 +138,15 @@ class DumpsterUseCasesTest : DescribeSpec({
         it("should update dumpster's volume") {
             val newVolume = 500.0
             val dumpster = Dumpster.from(1450.0, WasteName.PAPER)
-            CreateDumpsterUseCase(dumpster).execute()
+            val cp = CollectionPoint(position = Position(0L, 0L))
+
+            CreateCollectionPointUseCase(cp).execute()
+            CreateDumpsterUseCase(dumpster, cp).execute()
             UpdateDumpsterVolumeUseCase(dumpster.id, newVolume).execute()
 
             GetDumpsterByIdUseCase(dumpster.id).execute().occupiedVolume.value shouldBe newVolume
 
-            DeleteDumpsterUseCase(dumpster.id).execute()
+            deleteInstances(dumpster, cp)
         }
     }
 })
