@@ -10,13 +10,13 @@ import swc.controllers.errors.DumpsterNotFoundException
 import swc.entities.Dumpster
 import swc.entities.Volume
 import swc.entities.WasteName
-import swc.usecases.CloseDumpsterUseCase
-import swc.usecases.CreateDumpsterUseCase
-import swc.usecases.DeleteDumpsterUseCase
-import swc.usecases.GetDumpsterByIdUseCase
-import swc.usecases.GetDumpstersUseCase
-import swc.usecases.OpenDumpsterUseCase
-import swc.usecases.UpdateDumpsterVolumeUseCase
+import swc.usecases.dumpster.CloseDumpsterUseCase
+import swc.usecases.dumpster.CreateDumpsterUseCase
+import swc.usecases.dumpster.DeleteDumpsterUseCase
+import swc.usecases.dumpster.GetDumpsterByIdUseCase
+import swc.usecases.dumpster.GetDumpstersUseCase
+import swc.usecases.dumpster.OpenDumpsterUseCase
+import swc.usecases.dumpster.UpdateDumpsterVolumeUseCase
 import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalKotest::class)

@@ -1,6 +1,7 @@
-package swc.usecases
+package swc.usecases.dumpster
 
 import swc.entities.Dumpster
+import swc.usecases.UseCase
 
 class OpenDumpsterUseCase(
     private val id: String,
