@@ -5,11 +5,8 @@ import com.azure.digitaltwins.core.implementation.models.ErrorResponseException
 import swc.adapters.DumpsterDeserialization.parse
 import swc.adapters.DumpsterDeserialization.toDumpster
 import swc.adapters.DumpsterSerialization.toJson
-import swc.controllers.DumpsterManager.createDumpster
 import swc.controllers.errors.DumpsterNotFoundException
 import swc.entities.Dumpster
-import swc.entities.WasteName
-import java.util.Objects
 import java.util.concurrent.Executors
 
 object DumpsterManager : Manager {
