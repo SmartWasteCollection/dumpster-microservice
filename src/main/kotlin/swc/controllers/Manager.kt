@@ -6,9 +6,8 @@ interface Manager {
     fun getDumpsters(): List<Dumpster>
     fun getDumpsterById(id: String): Dumpster
     fun createDumpster(dumpster: Dumpster): String
-    fun openDumpster(dumpster: Dumpster)
+    fun openDumpster(id: String)
+    fun closeDumpster(id: String)
     fun deleteDumpster(id: String)
-    fun closeDumpster(dumpster: Dumpster)
-
-    fun closeAfterTimeout(dumpster: Dumpster, timeout: Long)
+    fun closeAfterTimeout(id: String, timeout: Long)
 }

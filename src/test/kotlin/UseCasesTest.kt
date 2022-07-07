@@ -1,4 +1,3 @@
-
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.assertions.timing.eventually
 import io.kotest.core.spec.style.DescribeSpec
@@ -11,6 +10,7 @@ import swc.controllers.errors.DumpsterNotFoundException
 import swc.entities.Dumpster
 import swc.entities.Volume
 import swc.entities.WasteName
+import swc.usecases.CloseDumpsterUseCase
 import swc.usecases.CreateDumpsterUseCase
 import swc.usecases.DeleteDumpsterUseCase
 import swc.usecases.GetDumpsterByIdUseCase
@@ -102,6 +102,19 @@ class UseCasesTest : DescribeSpec({
                 GetDumpsterByIdUseCase(dumpster.id).execute()
             }
             exception.message shouldBe "Dumpster with id ${dumpster.id} not found"
+        }
+    }
+
+    describe("CloseDumpsterUseCase") {
+        it("should close the dumpster") {
+            val dumpster = Dumpster.from(1450.0, WasteName.PAPER)
+            dumpster.isOpen = true
+            CreateDumpsterUseCase(dumpster).execute()
+            CloseDumpsterUseCase(dumpster.id).execute()
+
+            GetDumpsterByIdUseCase(dumpster.id).execute().isOpen shouldBe false
+
+            DeleteDumpsterUseCase(dumpster.id).execute()
         }
     }
 })
