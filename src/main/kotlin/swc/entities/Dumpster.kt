@@ -11,7 +11,7 @@ data class Dumpster(
 ) {
     companion object {
         const val CAPACITY_THRESHOLD = 95
-        const val TIMEOUT = 30
+        const val TIMEOUT_MS: Long = 30000
 
         fun from(capacity: Double, wasteName: WasteName) = Dumpster(type = DumpsterType.from(capacity, wasteName))
         fun from(id: String, capacity: Double, wasteName: WasteName) = Dumpster(id = id, type = DumpsterType.from(capacity, wasteName))

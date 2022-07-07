@@ -7,6 +7,7 @@ import swc.adapters.DumpsterDeserialization.toDumpster
 import swc.adapters.DumpsterSerialization.toJson
 import swc.controllers.errors.DumpsterNotFoundException
 import swc.entities.Dumpster
+import java.util.concurrent.Executors
 
 object DumpsterManager : Manager {
 
@@ -39,5 +40,18 @@ object DumpsterManager : Manager {
         JsonPatchDocument().appendReplace("/Open", true),
     )
 
+    override fun closeDumpster(dumpster: Dumpster) = AzureAuthentication.authClient.updateDigitalTwin(
+        dumpster.id,
+        JsonPatchDocument().appendReplace("/Open", false),
+    )
+
     override fun deleteDumpster(id: String) = AzureAuthentication.authClient.deleteDigitalTwin(id)
+
+    override fun closeAfterTimeout(dumpster: Dumpster, timeout: Long) {
+        val executor = Executors.newSingleThreadExecutor()
+        executor.execute {
+            Thread.sleep(timeout)
+            closeDumpster(dumpster)
+        }
+    }
 }
