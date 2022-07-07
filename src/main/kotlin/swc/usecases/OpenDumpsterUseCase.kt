@@ -1,6 +1,5 @@
 package swc.usecases
 
-import swc.controllers.DumpsterManager
 import swc.entities.Dumpster
 
 class OpenDumpsterUseCase(
@@ -8,11 +7,8 @@ class OpenDumpsterUseCase(
     private val timeout: Long = Dumpster.TIMEOUT_MS,
 ) : UseCase<Unit> {
     override fun execute() {
-        val dumpster = DumpsterManager.getDumpsterById(id)
-        if (dumpster.isAvailable()) DumpsterManager.openDumpster(dumpster)
-
-        println("BEFORE: ${DumpsterManager.getDumpsterById(dumpster.id)}")
-
-        DumpsterManager.closeAfterTimeout(dumpster, timeout)
+        val dumpster = manager().getDumpsterById(id)
+        if (dumpster.isAvailable()) manager().openDumpster(dumpster)
+        manager().closeAfterTimeout(dumpster, timeout)
     }
 }
