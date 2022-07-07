@@ -10,4 +10,5 @@ interface Manager {
     fun closeDumpster(id: String)
     fun deleteDumpster(id: String)
     fun closeAfterTimeout(id: String, timeout: Long)
+    fun updateVolume(id: String, newVolume: Double)
 }

@@ -54,4 +54,9 @@ object DumpsterManager : Manager {
             closeDumpster(id)
         }
     }
+
+    override fun updateVolume(id: String, newVolume: Double) = AzureAuthentication.authClient.updateDigitalTwin(
+        id,
+        JsonPatchDocument().appendReplace("/OccupiedVolume", newVolume),
+    )
 }

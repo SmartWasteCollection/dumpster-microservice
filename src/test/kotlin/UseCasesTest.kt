@@ -1,5 +1,6 @@
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.assertions.timing.eventually
+import io.kotest.common.ExperimentalKotest
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import swc.adapters.DumpsterDeserialization
@@ -15,10 +16,13 @@ import swc.usecases.CreateDumpsterUseCase
 import swc.usecases.DeleteDumpsterUseCase
 import swc.usecases.GetDumpsterByIdUseCase
 import swc.usecases.GetDumpstersUseCase
-import swc.usecases.OpenDumpsterUseCase
+import swc.usecases.UpdateDumpsterVolumeUseCase
 import kotlin.time.Duration.Companion.milliseconds
 
+@OptIn(ExperimentalKotest::class)
 class UseCasesTest : DescribeSpec({
+    concurrency = 1
+
     describe("A GetDumpsterByIdUseCase") {
         it("should return DumpsterNotFoundException if the dumpster is not in Azure Platform") {
             val exception = shouldThrow<DumpsterNotFoundException> {
@@ -113,6 +117,19 @@ class UseCasesTest : DescribeSpec({
             CloseDumpsterUseCase(dumpster.id).execute()
 
             GetDumpsterByIdUseCase(dumpster.id).execute().isOpen shouldBe false
+
+            DeleteDumpsterUseCase(dumpster.id).execute()
+        }
+    }
+
+    describe("UpdateDumpsterVolumeUseCase") {
+        it("should update dumpster's volume") {
+            val newVolume = 500.0
+            val dumpster = Dumpster.from(1450.0, WasteName.PAPER)
+            CreateDumpsterUseCase(dumpster).execute()
+            UpdateDumpsterVolumeUseCase(dumpster.id, newVolume).execute()
+
+            GetDumpsterByIdUseCase(dumpster.id).execute().occupiedVolume.value shouldBe newVolume
 
             DeleteDumpsterUseCase(dumpster.id).execute()
         }
