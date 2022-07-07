@@ -21,6 +21,7 @@ dependencies {
     implementation("com.azure:azure-identity:1.5.2")
     implementation("com.google.code.gson:gson:2.8.5")
     implementation("org.springframework.boot:spring-boot-starter-web:2.7.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1")
 }
 
 application {

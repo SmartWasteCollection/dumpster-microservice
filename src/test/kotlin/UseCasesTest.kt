@@ -1,5 +1,6 @@
 
 import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.assertions.timing.eventually
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import swc.adapters.DumpsterDeserialization
@@ -15,6 +16,7 @@ import swc.usecases.DeleteDumpsterUseCase
 import swc.usecases.GetDumpsterByIdUseCase
 import swc.usecases.GetDumpstersUseCase
 import swc.usecases.OpenDumpsterUseCase
+import kotlin.time.Duration.Companion.milliseconds
 
 class UseCasesTest : DescribeSpec({
     describe("A GetDumpsterByIdUseCase") {
@@ -63,6 +65,19 @@ class UseCasesTest : DescribeSpec({
             remoteDumpster.isOpen shouldBe false
 
             DeleteDumpsterUseCase(dumpster.id).execute()
+        }
+
+        it("should close the dumpster after timeout") {
+            val timeout: Long = 5000
+            val dumpster = Dumpster.from(1450.0, WasteName.PAPER)
+            CreateDumpsterUseCase(dumpster).execute()
+            OpenDumpsterUseCase(dumpster.id, timeout).execute()
+            GetDumpsterByIdUseCase(dumpster.id).execute().isOpen shouldBe true
+
+            eventually((timeout + 1000).milliseconds) {
+                GetDumpsterByIdUseCase(dumpster.id).execute().isOpen shouldBe false
+                DeleteDumpsterUseCase(dumpster.id).execute()
+            }
         }
     }
 
