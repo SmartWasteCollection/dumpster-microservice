@@ -8,7 +8,7 @@ class OpenDumpsterUseCase(
 ) : UseCase<Unit> {
     override fun execute() {
         val dumpster = manager().getDumpsterById(id)
-        if (dumpster.isAvailable()) manager().openDumpster(dumpster)
-        manager().closeAfterTimeout(dumpster, timeout)
+        if (dumpster.isAvailable()) manager().openDumpster(dumpster.id)
+        manager().closeAfterTimeout(dumpster.id, timeout)
     }
 }

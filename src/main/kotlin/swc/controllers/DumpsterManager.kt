@@ -35,23 +35,23 @@ object DumpsterManager : Manager {
         String::class.java,
     )
 
-    override fun openDumpster(dumpster: Dumpster) = AzureAuthentication.authClient.updateDigitalTwin(
-        dumpster.id,
+    override fun openDumpster(id: String) = AzureAuthentication.authClient.updateDigitalTwin(
+        id,
         JsonPatchDocument().appendReplace("/Open", true),
     )
 
-    override fun closeDumpster(dumpster: Dumpster) = AzureAuthentication.authClient.updateDigitalTwin(
-        dumpster.id,
+    override fun closeDumpster(id: String) = AzureAuthentication.authClient.updateDigitalTwin(
+        id,
         JsonPatchDocument().appendReplace("/Open", false),
     )
 
     override fun deleteDumpster(id: String) = AzureAuthentication.authClient.deleteDigitalTwin(id)
 
-    override fun closeAfterTimeout(dumpster: Dumpster, timeout: Long) {
+    override fun closeAfterTimeout(id: String, timeout: Long) {
         val executor = Executors.newSingleThreadExecutor()
         executor.execute {
             Thread.sleep(timeout)
-            closeDumpster(dumpster)
+            closeDumpster(id)
         }
     }
 }
