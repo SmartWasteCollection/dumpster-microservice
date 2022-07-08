@@ -8,8 +8,8 @@ import swc.entities.Position
 object CollectionPointsSerialization {
     fun Position.toJson(): JsonObject {
         val obj = JsonObject()
-        obj.addProperty("Latitude", this.latitude)
-        obj.addProperty("Longitude", this.longitude)
+        obj.addProperty("latitude", this.latitude)
+        obj.addProperty("longitude", this.longitude)
         return obj
     }
 
@@ -20,7 +20,7 @@ object CollectionPointsSerialization {
         val obj = JsonObject()
         obj.addProperty("${'$'}dtId", this.id)
         obj.add("${'$'}metadata", metadata)
-        obj.add("Position", this.position.toJson())
+        obj.add("position", this.position.toJson())
         return obj
     }
 }
@@ -28,11 +28,11 @@ object CollectionPointsSerialization {
 object CollectionPointsDeserialization {
     fun JsonObject.toCollectionPoint() = CollectionPoint(
         this["${'$'}dtId"].asString,
-        this.getAsJsonObject("Position").toPosition(),
+        this.getAsJsonObject("position").toPosition(),
     )
 
     private fun JsonObject.toPosition() = Position(
-        this.getAsJsonPrimitive("Latitude").asLong,
-        this.getAsJsonPrimitive("Longitude").asLong,
+        this.getAsJsonPrimitive("latitude").asLong,
+        this.getAsJsonPrimitive("longitude").asLong,
     )
 }
