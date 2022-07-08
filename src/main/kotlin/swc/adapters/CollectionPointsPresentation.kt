@@ -8,31 +8,31 @@ import swc.entities.Position
 object CollectionPointsSerialization {
     fun Position.toJson(): JsonObject {
         val obj = JsonObject()
-        obj.addProperty("latitude", this.latitude)
-        obj.addProperty("longitude", this.longitude)
+        obj.addProperty(CollectionPointsPropertyNames.LATITUDE, this.latitude)
+        obj.addProperty(CollectionPointsPropertyNames.LONGITUDE, this.longitude)
         return obj
     }
 
     fun CollectionPoint.toJson(): JsonObject {
         val metadata = JsonObject()
-        metadata.addProperty("${'$'}model", AzureConstants.COLLECTION_POINT_DT_MODEL_ID)
+        metadata.addProperty(DigitalTwinPropertyNames.MODEL, AzureConstants.COLLECTION_POINT_DT_MODEL_ID)
 
         val obj = JsonObject()
-        obj.addProperty("${'$'}dtId", this.id)
-        obj.add("${'$'}metadata", metadata)
-        obj.add("position", this.position.toJson())
+        obj.addProperty(DigitalTwinPropertyNames.DTID, this.id)
+        obj.add(DigitalTwinPropertyNames.METADATA, metadata)
+        obj.add(CollectionPointsPropertyNames.POSITION, this.position.toJson())
         return obj
     }
 }
 
 object CollectionPointsDeserialization {
     fun JsonObject.toCollectionPoint() = CollectionPoint(
-        this["${'$'}dtId"].asString,
-        this.getAsJsonObject("position").toPosition(),
+        this[DigitalTwinPropertyNames.DTID].asString,
+        this.getAsJsonObject(CollectionPointsPropertyNames.POSITION).toPosition(),
     )
 
     private fun JsonObject.toPosition() = Position(
-        this.getAsJsonPrimitive("latitude").asLong,
-        this.getAsJsonPrimitive("longitude").asLong,
+        this.getAsJsonPrimitive(CollectionPointsPropertyNames.LATITUDE).asLong,
+        this.getAsJsonPrimitive(CollectionPointsPropertyNames.LONGITUDE).asLong,
     )
 }
