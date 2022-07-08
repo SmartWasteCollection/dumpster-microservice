@@ -12,6 +12,7 @@ import swc.entities.WasteName
 import swc.usecases.collectionpoint.CreateCollectionPointUseCase
 import swc.usecases.collectionpoint.DeleteCollectionPointUseCase
 import swc.usecases.collectionpoint.GetCollectionPointByIdUseCase
+import swc.usecases.collectionpoint.GetCollectionPointFromDumpsterIdUseCase
 import swc.usecases.collectionpoint.GetDumpstersInCollectionPointUseCase
 import swc.usecases.dumpster.CreateDumpsterUseCase
 import swc.usecases.dumpster.DeleteDumpsterUseCase
@@ -55,6 +56,22 @@ class CollectionPointUseCasesTest : DescribeSpec({
 
             DeleteDumpsterUseCase(dumpster1.id).execute()
             DeleteDumpsterUseCase(dumpster2.id).execute()
+            DeleteCollectionPointUseCase(cp.id).execute()
+        }
+    }
+
+    describe("GetCollectionPointFromDumpsterIdUseCase") {
+        it("should return the correct collection point") {
+            val dumpster1 = Dumpster.from(1450.0, WasteName.PAPER)
+            val cp = CollectionPoint(position = Position(0L, 0L))
+
+            CreateCollectionPointUseCase(cp).execute()
+            CreateDumpsterUseCase(dumpster1, cp).execute()
+
+            val res = GetCollectionPointFromDumpsterIdUseCase(dumpster1.id).execute()
+            res shouldBe cp
+
+            DeleteDumpsterUseCase(dumpster1.id).execute()
             DeleteCollectionPointUseCase(cp.id).execute()
         }
     }
