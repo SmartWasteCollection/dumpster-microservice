@@ -1,3 +1,5 @@
+package entities
+
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
@@ -11,7 +13,7 @@ import swc.entities.Volume
 import swc.entities.WasteColor
 import swc.entities.WasteName
 
-class EntitiesTest : DescribeSpec({
+class DumpsterTest : DescribeSpec({
     describe("A Volume") {
         it("can be initialized with a specific value") {
             val value = 1450.0
