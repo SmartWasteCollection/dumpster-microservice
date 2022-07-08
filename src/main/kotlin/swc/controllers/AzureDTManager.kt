@@ -68,6 +68,8 @@ object AzureDTManager : Manager {
     override fun getDumpstersInCollectionPoint(id: String) =
         AzureAuthentication.authClient.listRelationships(id, BasicRelationship::class.java).map { getDumpsterById(it.targetId) }
 
+    override fun getCollectionPointFromDumspterId(id: String) = AzureAuthentication.authClient.listIncomingRelationships(id).first().sourceId
+
     private fun deleteDigitalTwin(id: String) = AzureAuthentication.authClient.deleteDigitalTwin(id)
     private fun updateDigitalTwin(id: String, path: String, newValue: Any) =
         AzureAuthentication.authClient.updateDigitalTwin(id, JsonPatchDocument().appendReplace(path, newValue))

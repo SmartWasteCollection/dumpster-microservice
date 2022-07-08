@@ -16,4 +16,5 @@ interface Manager {
     fun deleteCollectionPoint(id: String)
     fun getCollectionPointById(id: String): CollectionPoint
     fun getDumpstersInCollectionPoint(id: String): List<Dumpster>
+    fun getCollectionPointFromDumspterId(id: String): String
 }

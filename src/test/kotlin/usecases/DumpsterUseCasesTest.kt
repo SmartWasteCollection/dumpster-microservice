@@ -87,7 +87,7 @@ class DumpsterUseCasesTest : DescribeSpec({
             OpenDumpsterUseCase(dumpster.id, timeout).execute()
             GetDumpsterByIdUseCase(dumpster.id).execute().isOpen shouldBe true
 
-            eventually((timeout + 1000).milliseconds) {
+            eventually((timeout + 2000).milliseconds) {
                 GetDumpsterByIdUseCase(dumpster.id).execute().isOpen shouldBe false
                 deleteInstances(dumpster, cp)
             }
