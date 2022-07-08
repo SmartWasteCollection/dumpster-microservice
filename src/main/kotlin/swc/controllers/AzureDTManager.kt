@@ -28,11 +28,11 @@ object AzureDTManager : Manager {
     override fun getCollectionPointById(id: String) =
         parse(getDigitalTwinById(id, CollectionPointNotFoundException("CollectionPoint with id $id not found"))).toCollectionPoint()
 
-    override fun createDumpster(dumpster: Dumpster, collectionPoint: CollectionPoint): Dumpster {
+    override fun createDumpster(dumpster: Dumpster, collectionPointId: String): Dumpster {
         val createdDumpster = createDigitalTwin(dumpster.id, dumpster.toJson().toString())
-        val relationship = AzureDTRelationshipFactory.from(collectionPoint, dumpster)
+        val relationship = AzureDTRelationshipFactory.from(collectionPointId, dumpster)
         AzureAuthentication.authClient.createOrReplaceRelationship(
-            collectionPoint.id,
+            collectionPointId,
             relationship.id,
             relationship,
             BasicRelationship::class.java
@@ -59,6 +59,10 @@ object AzureDTManager : Manager {
         Thread.sleep(timeout)
         closeDumpster(id)
     }
+
+    override fun calculateNextDumpsterId() = "Dumpster${
+    parse(AzureAuthentication.authClient.query(AzureQueries.GET_COUNT_DUMPSTER_QUERY, String::class.java).first())["COUNT"]
+    }"
 
     override fun updateVolume(id: String, newVolume: Double) = updateDigitalTwin(id, "/occupiedVolume", newVolume)
 

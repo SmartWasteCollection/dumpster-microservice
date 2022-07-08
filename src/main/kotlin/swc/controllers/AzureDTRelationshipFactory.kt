@@ -1,13 +1,12 @@
 package swc.controllers
 
 import com.azure.digitaltwins.core.BasicRelationship
-import swc.entities.CollectionPoint
 import swc.entities.Dumpster
 
 object AzureDTRelationshipFactory {
-    fun from(collectionPoint: CollectionPoint, dumpster: Dumpster): BasicRelationship = BasicRelationship(
-        "${collectionPoint.id}-${dumpster.id}",
-        collectionPoint.id,
+    fun from(collectionPointId: String, dumpster: Dumpster): BasicRelationship = BasicRelationship(
+        "$collectionPointId-${dumpster.id}",
+        collectionPointId,
         dumpster.id,
         AzureConstants.RELATIONSHIP_NAME
     )
