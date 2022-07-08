@@ -4,6 +4,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.collections.shouldBeIn
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import swc.controllers.errors.CollectionPointNotFoundException
 import swc.entities.CollectionPoint
 import swc.entities.Dumpster
@@ -16,6 +17,7 @@ import swc.usecases.collectionpoint.GetCollectionPointFromDumpsterIdUseCase
 import swc.usecases.collectionpoint.GetDumpstersInCollectionPointUseCase
 import swc.usecases.dumpster.CreateDumpsterUseCase
 import swc.usecases.dumpster.DeleteDumpsterUseCase
+import swc.usecases.dumpster.GetDumpstersUseCase
 
 class CollectionPointUseCasesTest : DescribeSpec({
     describe("CreateCollectionPointUseCase") {
@@ -73,6 +75,13 @@ class CollectionPointUseCasesTest : DescribeSpec({
 
             DeleteDumpsterUseCase(dumpster1.id).execute()
             DeleteCollectionPointUseCase(cp.id).execute()
+        }
+    }
+
+    describe("GetCollectionPointsUseCases") {
+        it("should return a list of CollectionPoints") {
+            val list = GetDumpstersUseCase().execute()
+            list.shouldBeInstanceOf<List<Dumpster>>()
         }
     }
 })
