@@ -43,9 +43,9 @@ object AzureDTManager : Manager {
     override fun createCollectionPoint(collectionPoint: CollectionPoint) =
         parse(createDigitalTwin(collectionPoint.id, collectionPoint.toJson().toString())).toCollectionPoint()
 
-    override fun openDumpster(id: String) = updateDigitalTwin(id, "/Open", true)
+    override fun openDumpster(id: String) = updateDigitalTwin(id, "/open", true)
 
-    override fun closeDumpster(id: String) = updateDigitalTwin(id, "/Open", false)
+    override fun closeDumpster(id: String) = updateDigitalTwin(id, "/open", false)
 
     override fun deleteDumpster(id: String) {
         AzureAuthentication.authClient.listIncomingRelationships(id).forEach {
@@ -63,7 +63,7 @@ object AzureDTManager : Manager {
         }
     }
 
-    override fun updateVolume(id: String, newVolume: Double) = updateDigitalTwin(id, "/OccupiedVolume", newVolume)
+    override fun updateVolume(id: String, newVolume: Double) = updateDigitalTwin(id, "/occupiedVolume", newVolume)
 
     override fun getDumpstersInCollectionPoint(id: String) =
         AzureAuthentication.authClient.listRelationships(id, BasicRelationship::class.java)
