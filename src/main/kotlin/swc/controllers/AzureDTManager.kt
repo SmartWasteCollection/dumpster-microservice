@@ -55,12 +55,9 @@ object AzureDTManager : Manager {
     }
     override fun deleteCollectionPoint(id: String) = deleteDigitalTwin(id)
 
-    override fun closeAfterTimeout(id: String, timeout: Long) {
-        val executor = Executors.newSingleThreadExecutor()
-        executor.execute {
-            Thread.sleep(timeout)
-            closeDumpster(id)
-        }
+    override fun closeAfterTimeout(id: String, timeout: Long) = Executors.newSingleThreadExecutor().execute {
+        Thread.sleep(timeout)
+        closeDumpster(id)
     }
 
     override fun updateVolume(id: String, newVolume: Double) = updateDigitalTwin(id, "/occupiedVolume", newVolume)

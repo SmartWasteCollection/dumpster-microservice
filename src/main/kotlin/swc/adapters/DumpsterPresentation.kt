@@ -13,66 +13,66 @@ import swc.entities.WasteName
 object DumpsterSerialization {
     fun DumpsterType.toJson(): JsonObject {
         val obj = JsonObject()
-        obj.add("size", this.size.toJson())
-        obj.add("typeOfOrdinaryWaste", this.typeOfOrdinaryWaste.toJson())
+        obj.add(DumpsterPropertyNames.SIZE, this.size.toJson())
+        obj.add(DumpsterPropertyNames.TYPE_OF_ORDINARY_WASTE, this.typeOfOrdinaryWaste.toJson())
         return obj
     }
 
     fun Size.toJson(): JsonObject {
         val obj = JsonObject()
-        obj.addProperty("dimension", this.dimension.toString())
-        obj.addProperty("capacity", this.capacity)
+        obj.addProperty(DumpsterPropertyNames.DIMENSION, this.dimension.toString())
+        obj.addProperty(DumpsterPropertyNames.CAPACITY, this.capacity)
         return obj
     }
 
     fun TypeOfOrdinaryWaste.toJson(): JsonObject {
         val obj = JsonObject()
-        obj.addProperty("wasteName", this.wasteName.toString())
-        obj.addProperty("color", this.wasteColor.toString())
+        obj.addProperty(DumpsterPropertyNames.WASTE_NAME, this.wasteName.toString())
+        obj.addProperty(DumpsterPropertyNames.COLOR, this.wasteColor.toString())
         return obj
     }
 
     fun Dumpster.toJson(): JsonObject {
         val metadata = JsonObject()
-        metadata.addProperty("${'$'}model", AzureConstants.DUMPSTER_DT_MODEL_ID)
+        metadata.addProperty(DigitalTwinPropertyNames.MODEL, AzureConstants.DUMPSTER_DT_MODEL_ID)
 
         val obj = JsonObject()
-        obj.addProperty("${'$'}dtId", this.id)
-        obj.add("${'$'}metadata", metadata)
-        obj.add("dumpsterType", this.type.toJson())
-        obj.addProperty("open", this.isOpen)
-        obj.addProperty("working", this.isWorking)
-        obj.addProperty("occupiedVolume", this.occupiedVolume.value)
+        obj.addProperty(DigitalTwinPropertyNames.DTID, this.id)
+        obj.add(DigitalTwinPropertyNames.METADATA, metadata)
+        obj.add(DumpsterPropertyNames.DUMPSTER_TYPE, this.type.toJson())
+        obj.addProperty(DumpsterPropertyNames.OPEN, this.isOpen)
+        obj.addProperty(DumpsterPropertyNames.WORKING, this.isWorking)
+        obj.addProperty(DumpsterPropertyNames.OCCUPIED_VOLUME, this.occupiedVolume.value)
         return obj
     }
 }
 
 object DumpsterDeserialization {
     fun JsonObject.toDumpster() = Dumpster(
-        this["${'$'}dtId"].asString,
-        this.getAsJsonObject("dumpsterType").toDumpsterType(),
-        this["open"].asBoolean,
-        this["working"].asBoolean,
+        this[DigitalTwinPropertyNames.DTID].asString,
+        this.getAsJsonObject(DumpsterPropertyNames.DUMPSTER_TYPE).toDumpsterType(),
+        this[DumpsterPropertyNames.OPEN].asBoolean,
+        this[DumpsterPropertyNames.WORKING].asBoolean,
         this.toVolume()
     )
 
     fun parse(json: String): JsonObject = JsonParser().parse(json).asJsonObject
 
     private fun JsonObject.toSize() = Size.from(
-        this.getAsJsonPrimitive("capacity")
+        this.getAsJsonPrimitive(DumpsterPropertyNames.CAPACITY)
             .asDouble
     )
 
     private fun JsonObject.toWasteName() = WasteName.valueOf(
-        this.getAsJsonObject("typeOfOrdinaryWaste")
-            .getAsJsonPrimitive("wasteName")
+        this.getAsJsonObject(DumpsterPropertyNames.TYPE_OF_ORDINARY_WASTE)
+            .getAsJsonPrimitive(DumpsterPropertyNames.WASTE_NAME)
             .asString
     )
 
-    private fun JsonObject.toVolume() = Volume(this["occupiedVolume"].asDouble)
+    private fun JsonObject.toVolume() = Volume(this[DumpsterPropertyNames.OCCUPIED_VOLUME].asDouble)
 
     private fun JsonObject.toDumpsterType() = DumpsterType.from(
-        this.getAsJsonObject("size").toSize().capacity,
+        this.getAsJsonObject(DumpsterPropertyNames.SIZE).toSize().capacity,
         this.toWasteName()
     )
 }
