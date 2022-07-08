@@ -5,7 +5,7 @@ import swc.usecases.UseCase
 
 class GetCollectionPointFromDumpsterIdUseCase(private val id: String) : UseCase<CollectionPoint> {
     override fun execute(): CollectionPoint {
-        val cpId = manager().getCollectionPointFromDumspterId(id)
+        val cpId = manager().getCollectionPointFromDumpsterId(id)
         return GetCollectionPointByIdUseCase(cpId).execute()
     }
 }

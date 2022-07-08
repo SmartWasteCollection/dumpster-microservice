@@ -66,9 +66,15 @@ object AzureDTManager : Manager {
     override fun updateVolume(id: String, newVolume: Double) = updateDigitalTwin(id, "/OccupiedVolume", newVolume)
 
     override fun getDumpstersInCollectionPoint(id: String) =
-        AzureAuthentication.authClient.listRelationships(id, BasicRelationship::class.java).map { getDumpsterById(it.targetId) }
+        AzureAuthentication.authClient.listRelationships(id, BasicRelationship::class.java)
+            .map { getDumpsterById(it.targetId) }
 
-    override fun getCollectionPointFromDumspterId(id: String) = AzureAuthentication.authClient.listIncomingRelationships(id).first().sourceId
+    override fun getCollectionPointFromDumpsterId(id: String): String =
+        AzureAuthentication.authClient.listIncomingRelationships(id).first().sourceId
+
+    override fun getCollectionPoints() = AzureAuthentication.authClient
+        .query(AzureQueries.GET_ALL_CP_QUERY, String::class.java)
+        .map { parse(it).toCollectionPoint() }
 
     private fun deleteDigitalTwin(id: String) = AzureAuthentication.authClient.deleteDigitalTwin(id)
     private fun updateDigitalTwin(id: String, path: String, newValue: Any) =
