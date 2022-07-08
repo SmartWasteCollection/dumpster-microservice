@@ -48,8 +48,8 @@ class CollectionPointUseCasesTest : DescribeSpec({
             val cp = CollectionPoint(position = Position(0L, 0L))
 
             CreateCollectionPointUseCase(cp).execute()
-            CreateDumpsterUseCase(dumpster1, cp).execute()
-            CreateDumpsterUseCase(dumpster2, cp).execute()
+            CreateDumpsterUseCase(dumpster1, cp.id).execute()
+            CreateDumpsterUseCase(dumpster2, cp.id).execute()
 
             val list = GetDumpstersInCollectionPointUseCase(cp.id).execute()
             val resList = listOf(dumpster1, dumpster2)
@@ -68,7 +68,7 @@ class CollectionPointUseCasesTest : DescribeSpec({
             val cp = CollectionPoint(position = Position(0L, 0L))
 
             CreateCollectionPointUseCase(cp).execute()
-            CreateDumpsterUseCase(dumpster1, cp).execute()
+            CreateDumpsterUseCase(dumpster1, cp.id).execute()
 
             val res = GetCollectionPointFromDumpsterIdUseCase(dumpster1.id).execute()
             res shouldBe cp

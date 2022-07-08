@@ -44,7 +44,7 @@ class DumpsterUseCasesTest : DescribeSpec({
             val cp = CollectionPoint(position = Position(0L, 0L))
 
             CreateCollectionPointUseCase(cp).execute()
-            CreateDumpsterUseCase(dumpster, cp).execute() shouldBe dumpster
+            CreateDumpsterUseCase(dumpster, cp.id).execute() shouldBe dumpster
 
             deleteInstances(dumpster, cp)
         }
@@ -56,7 +56,7 @@ class DumpsterUseCasesTest : DescribeSpec({
             val cp = CollectionPoint(position = Position(0L, 0L))
 
             CreateCollectionPointUseCase(cp).execute()
-            val res = CreateDumpsterUseCase(dumpster, cp).execute()
+            val res = CreateDumpsterUseCase(dumpster, cp.id).execute()
             res.isOpen shouldBe false
 
             OpenDumpsterUseCase(dumpster.id).execute().isOpen shouldBe true
@@ -70,7 +70,7 @@ class DumpsterUseCasesTest : DescribeSpec({
             val cp = CollectionPoint(position = Position(0L, 0L))
 
             CreateCollectionPointUseCase(cp).execute()
-            CreateDumpsterUseCase(dumpster, cp).execute()
+            CreateDumpsterUseCase(dumpster, cp.id).execute()
 
             OpenDumpsterUseCase(dumpster.id).execute().isOpen shouldBe false
 
@@ -83,7 +83,7 @@ class DumpsterUseCasesTest : DescribeSpec({
             val cp = CollectionPoint(position = Position(0L, 0L))
 
             CreateCollectionPointUseCase(cp).execute()
-            CreateDumpsterUseCase(dumpster, cp).execute()
+            CreateDumpsterUseCase(dumpster, cp.id).execute()
             OpenDumpsterUseCase(dumpster.id, timeout).execute()
             GetDumpsterByIdUseCase(dumpster.id).execute().isOpen shouldBe true
 
@@ -108,7 +108,7 @@ class DumpsterUseCasesTest : DescribeSpec({
             val cp = CollectionPoint(position = Position(0L, 0L))
 
             CreateCollectionPointUseCase(cp).execute()
-            CreateDumpsterUseCase(dumpster, cp).execute() shouldBe dumpster
+            CreateDumpsterUseCase(dumpster, cp.id).execute() shouldBe dumpster
 
             deleteInstances(dumpster, cp)
             val exception = shouldThrow<DumpsterNotFoundException> {
@@ -125,7 +125,7 @@ class DumpsterUseCasesTest : DescribeSpec({
             val cp = CollectionPoint(position = Position(0L, 0L))
 
             CreateCollectionPointUseCase(cp).execute()
-            CreateDumpsterUseCase(dumpster, cp).execute()
+            CreateDumpsterUseCase(dumpster, cp.id).execute()
             CloseDumpsterUseCase(dumpster.id).execute()
 
             GetDumpsterByIdUseCase(dumpster.id).execute().isOpen shouldBe false
@@ -141,7 +141,7 @@ class DumpsterUseCasesTest : DescribeSpec({
             val cp = CollectionPoint(position = Position(0L, 0L))
 
             CreateCollectionPointUseCase(cp).execute()
-            CreateDumpsterUseCase(dumpster, cp).execute()
+            CreateDumpsterUseCase(dumpster, cp.id).execute()
             UpdateDumpsterVolumeUseCase(dumpster.id, newVolume).execute()
 
             GetDumpsterByIdUseCase(dumpster.id).execute().occupiedVolume.value shouldBe newVolume

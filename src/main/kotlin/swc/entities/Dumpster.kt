@@ -4,7 +4,7 @@ import java.util.UUID
 
 data class Dumpster(
     val id: String = UUID.randomUUID().toString(),
-    val type: DumpsterType,
+    val dumpsterType: DumpsterType,
     var isOpen: Boolean = false,
     var isWorking: Boolean = true,
     var occupiedVolume: Volume = Volume(),
@@ -13,9 +13,9 @@ data class Dumpster(
         const val CAPACITY_THRESHOLD = 95
         const val TIMEOUT_MS: Long = 30000
 
-        fun from(capacity: Double, wasteName: WasteName) = Dumpster(type = DumpsterType.from(capacity, wasteName))
-        fun from(id: String, capacity: Double, wasteName: WasteName) = Dumpster(id = id, type = DumpsterType.from(capacity, wasteName))
+        fun from(capacity: Double, wasteName: WasteName) = Dumpster(dumpsterType = DumpsterType.from(capacity, wasteName))
+        fun from(id: String, capacity: Double, wasteName: WasteName) = Dumpster(id = id, dumpsterType = DumpsterType.from(capacity, wasteName))
     }
 
-    fun isAvailable(): Boolean = isWorking && occupiedVolume.getOccupiedPercentage(type.size.capacity) < CAPACITY_THRESHOLD
+    fun isAvailable(): Boolean = isWorking && occupiedVolume.getOccupiedPercentage(dumpsterType.size.capacity) < CAPACITY_THRESHOLD
 }
