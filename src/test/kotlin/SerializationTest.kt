@@ -22,7 +22,7 @@ class SerializationTest : DescribeSpec({
             val typeAfter = typeSerialized.toDumpster()
             typeAfter.shouldBeInstanceOf<Dumpster>()
             typeAfter.id shouldBe typeBefore.id
-            typeAfter.type shouldBe typeBefore.type
+            typeAfter.dumpsterType shouldBe typeBefore.dumpsterType
             typeAfter.isOpen shouldBe typeBefore.isOpen
             typeAfter.isWorking shouldBe typeBefore.isWorking
             typeAfter.occupiedVolume shouldBe typeBefore.occupiedVolume

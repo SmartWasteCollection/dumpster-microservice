@@ -39,7 +39,7 @@ object DumpsterSerialization {
         val obj = JsonObject()
         obj.addProperty(DigitalTwinPropertyNames.DTID, this.id)
         obj.add(DigitalTwinPropertyNames.METADATA, metadata)
-        obj.add(DumpsterPropertyNames.DUMPSTER_TYPE, this.type.toJson())
+        obj.add(DumpsterPropertyNames.DUMPSTER_TYPE, this.dumpsterType.toJson())
         obj.addProperty(DumpsterPropertyNames.OPEN, this.isOpen)
         obj.addProperty(DumpsterPropertyNames.WORKING, this.isWorking)
         obj.addProperty(DumpsterPropertyNames.OCCUPIED_VOLUME, this.occupiedVolume.value)
@@ -49,7 +49,7 @@ object DumpsterSerialization {
 
 object DumpsterDeserialization {
     fun JsonObject.toDumpster() = Dumpster(
-        this[DigitalTwinPropertyNames.DTID].asString,
+        (this["id"] ?: this[DigitalTwinPropertyNames.DTID]).asString,
         this.getAsJsonObject(DumpsterPropertyNames.DUMPSTER_TYPE).toDumpsterType(),
         this[DumpsterPropertyNames.OPEN].asBoolean,
         this[DumpsterPropertyNames.WORKING].asBoolean,
@@ -69,7 +69,12 @@ object DumpsterDeserialization {
             .asString
     )
 
-    private fun JsonObject.toVolume() = Volume(this[DumpsterPropertyNames.OCCUPIED_VOLUME].asDouble)
+    private fun JsonObject.toVolume() = Volume(
+        when (val volume = this[DumpsterPropertyNames.OCCUPIED_VOLUME]) {
+            is JsonObject -> volume["value"]
+            else -> volume
+        }.asDouble
+    )
 
     private fun JsonObject.toDumpsterType() = DumpsterType.from(
         this.getAsJsonObject(DumpsterPropertyNames.SIZE).toSize().capacity,
