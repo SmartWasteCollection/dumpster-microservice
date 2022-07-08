@@ -27,7 +27,7 @@ object CollectionPointsSerialization {
 
 object CollectionPointsDeserialization {
     fun JsonObject.toCollectionPoint() = CollectionPoint(
-        this[DigitalTwinPropertyNames.DTID].asString,
+        (this["id"] ?: this[DigitalTwinPropertyNames.DTID]).asString,
         this.getAsJsonObject(CollectionPointsPropertyNames.POSITION).toPosition(),
     )
 
