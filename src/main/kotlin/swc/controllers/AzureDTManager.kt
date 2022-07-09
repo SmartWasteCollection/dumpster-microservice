@@ -47,13 +47,15 @@ object AzureDTManager : Manager {
 
     override fun closeDumpster(id: String) = updateDigitalTwin(id, "/open", false)
 
-    override fun deleteDumpster(id: String) {
+    override fun deleteDumpster(id: String) =
         AzureAuthentication.authClient.listIncomingRelationships(id).forEach {
             AzureAuthentication.authClient.deleteRelationship(it.sourceId, it.relationshipId)
-        }
-        deleteDigitalTwin(id)
-    }
-    override fun deleteCollectionPoint(id: String) = deleteDigitalTwin(id)
+        }.also { deleteDigitalTwin(id) }
+
+    override fun deleteCollectionPoint(id: String) = AzureAuthentication.authClient
+        .listRelationships(id, BasicRelationship::class.java).forEach {
+            AzureAuthentication.authClient.deleteRelationship(it.sourceId, it.id)
+        }.also { deleteDigitalTwin(id) }
 
     override fun closeAfterTimeout(id: String, timeout: Long) = Executors.newSingleThreadExecutor().execute {
         Thread.sleep(timeout)
@@ -77,7 +79,12 @@ object AzureDTManager : Manager {
         .query(AzureQueries.GET_ALL_CP_QUERY, String::class.java)
         .map { parse(it).toCollectionPoint() }
 
+    override fun calculateNextCollectionPointId() = "CollectionPoint${
+    parse(AzureAuthentication.authClient.query(AzureQueries.GET_COUNT_CP_QUERY, String::class.java).first())["COUNT"]
+    }"
+
     private fun deleteDigitalTwin(id: String) = AzureAuthentication.authClient.deleteDigitalTwin(id)
+
     private fun updateDigitalTwin(id: String, path: String, newValue: Any) =
         AzureAuthentication.authClient.updateDigitalTwin(id, JsonPatchDocument().appendReplace(path, newValue))
 
