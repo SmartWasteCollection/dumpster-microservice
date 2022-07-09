@@ -1,4 +1,4 @@
-package swc.controllers.errors
+package swc.controllers.api.errors
 
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ResponseStatus

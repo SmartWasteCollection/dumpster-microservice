@@ -4,8 +4,10 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.assertions.timing.eventually
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.types.shouldBeInstanceOf
-import swc.controllers.errors.DumpsterNotFoundException
+import swc.controllers.api.errors.DumpsterNotFoundException
+import swc.controllers.azure.AzureDTManager
 import swc.entities.CollectionPoint
 import swc.entities.Dumpster
 import swc.entities.Position
@@ -147,6 +149,14 @@ class DumpsterUseCasesTest : DescribeSpec({
             GetDumpsterByIdUseCase(dumpster.id).execute().occupiedVolume.value shouldBe newVolume
 
             deleteInstances(dumpster, cp)
+        }
+    }
+
+    describe("Generation of new Dumpster ID") {
+        it("should be a correctly formatted string") {
+            val newId = AzureDTManager.calculateNextDumpsterId()
+            newId.shouldBeInstanceOf<String>()
+            newId shouldContain("Dumpster[0-9]+".toRegex())
         }
     }
 })
