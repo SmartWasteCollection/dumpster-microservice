@@ -31,7 +31,7 @@ class SerializationTest : DescribeSpec({
 
     describe("A CollectionPoint") {
         it("should be serialized and deserialized correctly") {
-            val typeBefore = CollectionPoint(position = Position(0L, 0L))
+            val typeBefore = CollectionPoint(position = Position(0.0, 0.0))
 
             val typeSerialized = typeBefore.toJson()
             typeSerialized.shouldBeInstanceOf<JsonObject>()

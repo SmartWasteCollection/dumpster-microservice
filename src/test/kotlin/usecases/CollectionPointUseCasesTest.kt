@@ -24,7 +24,7 @@ import swc.usecases.dumpster.GetCollectionPointFromDumpsterIdUseCase
 class CollectionPointUseCasesTest : DescribeSpec({
     describe("CreateCollectionPointUseCase") {
         it("should create the digital twin inside Azure Platform") {
-            val cp = CollectionPoint(position = Position(0L, 0L))
+            val cp = CollectionPoint(position = Position(45.13, 17.49))
             CreateCollectionPointUseCase(cp).execute()
             GetCollectionPointByIdUseCase(cp.id).execute() shouldBe cp
             DeleteCollectionPointUseCase(cp.id).execute()
@@ -33,7 +33,7 @@ class CollectionPointUseCasesTest : DescribeSpec({
 
     describe("DeleteCollectionPointUseCase") {
         it("should delete the digital twin from Azure Platform") {
-            val cp = CollectionPoint(position = Position(0L, 0L))
+            val cp = CollectionPoint(position = Position(0.0, 0.0))
             CreateCollectionPointUseCase(cp).execute()
             DeleteCollectionPointUseCase(cp.id).execute()
             val exception = shouldThrow<CollectionPointNotFoundException> {
@@ -47,7 +47,7 @@ class CollectionPointUseCasesTest : DescribeSpec({
         it("should return the correct list of dumpster") {
             val dumpster1 = Dumpster.from(1450.0, WasteName.PAPER)
             val dumpster2 = Dumpster.from(1450.0, WasteName.PAPER)
-            val cp = CollectionPoint(position = Position(0L, 0L))
+            val cp = CollectionPoint(position = Position(0.0, 0.0))
 
             CreateCollectionPointUseCase(cp).execute()
             CreateDumpsterUseCase(dumpster1, cp.id).execute()
@@ -67,7 +67,7 @@ class CollectionPointUseCasesTest : DescribeSpec({
     describe("GetCollectionPointFromDumpsterIdUseCase") {
         it("should return the correct collection point") {
             val dumpster1 = Dumpster.from(1450.0, WasteName.PAPER)
-            val cp = CollectionPoint(position = Position(0L, 0L))
+            val cp = CollectionPoint(position = Position(0.0, 0.0))
 
             CreateCollectionPointUseCase(cp).execute()
             CreateDumpsterUseCase(dumpster1, cp.id).execute()
