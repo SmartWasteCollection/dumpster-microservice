@@ -43,7 +43,7 @@ class DumpsterUseCasesTest : DescribeSpec({
     describe("A CreateDumpsterUseCase") {
         it("should create a new dumpster digital twin") {
             val dumpster = Dumpster.from(500.0, WasteName.ORGANIC)
-            val cp = CollectionPoint(position = Position(0L, 0L))
+            val cp = CollectionPoint(position = Position(0.0, 0.0))
 
             CreateCollectionPointUseCase(cp).execute()
             CreateDumpsterUseCase(dumpster, cp.id).execute() shouldBe dumpster
@@ -55,7 +55,7 @@ class DumpsterUseCasesTest : DescribeSpec({
     describe("A OpenDumpsterUseCase") {
         it("should modify the Open property of an available dumpster on Azure Platform") {
             val dumpster = Dumpster.from(500.0, WasteName.ORGANIC)
-            val cp = CollectionPoint(position = Position(0L, 0L))
+            val cp = CollectionPoint(position = Position(0.0, 0.0))
 
             CreateCollectionPointUseCase(cp).execute()
             val res = CreateDumpsterUseCase(dumpster, cp.id).execute()
@@ -69,7 +69,7 @@ class DumpsterUseCasesTest : DescribeSpec({
         it("should not modify the Open property of a non-available dumpster on Azure Platform") {
             val dumpster = Dumpster.from(500.0, WasteName.ORGANIC)
             dumpster.occupiedVolume = Volume(499.0)
-            val cp = CollectionPoint(position = Position(0L, 0L))
+            val cp = CollectionPoint(position = Position(0.0, 0.0))
 
             CreateCollectionPointUseCase(cp).execute()
             CreateDumpsterUseCase(dumpster, cp.id).execute()
@@ -82,7 +82,7 @@ class DumpsterUseCasesTest : DescribeSpec({
         it("should close the dumpster after timeout") {
             val timeout: Long = 5000
             val dumpster = Dumpster.from(1450.0, WasteName.PAPER)
-            val cp = CollectionPoint(position = Position(0L, 0L))
+            val cp = CollectionPoint(position = Position(0.0, 0.0))
 
             CreateCollectionPointUseCase(cp).execute()
             CreateDumpsterUseCase(dumpster, cp.id).execute()
@@ -107,7 +107,7 @@ class DumpsterUseCasesTest : DescribeSpec({
     describe("DeleteDumpsterUseCase") {
         it("should delete the desired digital twin from Azure Platform") {
             val dumpster = Dumpster.from(500.0, WasteName.ORGANIC)
-            val cp = CollectionPoint(position = Position(0L, 0L))
+            val cp = CollectionPoint(position = Position(0.0, 0.0))
 
             CreateCollectionPointUseCase(cp).execute()
             CreateDumpsterUseCase(dumpster, cp.id).execute() shouldBe dumpster
@@ -124,7 +124,7 @@ class DumpsterUseCasesTest : DescribeSpec({
         it("should close the dumpster") {
             val dumpster = Dumpster.from(1450.0, WasteName.PAPER)
             dumpster.isOpen = true
-            val cp = CollectionPoint(position = Position(0L, 0L))
+            val cp = CollectionPoint(position = Position(0.0, 0.0))
 
             CreateCollectionPointUseCase(cp).execute()
             CreateDumpsterUseCase(dumpster, cp.id).execute()
@@ -140,7 +140,7 @@ class DumpsterUseCasesTest : DescribeSpec({
         it("should update dumpster's volume") {
             val newVolume = 500.0
             val dumpster = Dumpster.from(1450.0, WasteName.PAPER)
-            val cp = CollectionPoint(position = Position(0L, 0L))
+            val cp = CollectionPoint(position = Position(0.0, 0.0))
 
             CreateCollectionPointUseCase(cp).execute()
             CreateDumpsterUseCase(dumpster, cp.id).execute()
