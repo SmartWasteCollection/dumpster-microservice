@@ -1,7 +1,7 @@
 package swc.usecases
 
-import swc.controllers.AzureDTManager
 import swc.controllers.Manager
+import swc.controllers.azure.AzureDTManager
 
 interface UseCase<T> {
     fun execute(): T

@@ -22,7 +22,7 @@ class SerializationTest : DescribeSpec({
             val typeAfter = typeSerialized.toDumpster()
             typeAfter.shouldBeInstanceOf<Dumpster>()
             typeAfter.id shouldBe typeBefore.id
-            typeAfter.type shouldBe typeBefore.type
+            typeAfter.dumpsterType shouldBe typeBefore.dumpsterType
             typeAfter.isOpen shouldBe typeBefore.isOpen
             typeAfter.isWorking shouldBe typeBefore.isWorking
             typeAfter.occupiedVolume shouldBe typeBefore.occupiedVolume
@@ -31,7 +31,7 @@ class SerializationTest : DescribeSpec({
 
     describe("A CollectionPoint") {
         it("should be serialized and deserialized correctly") {
-            val typeBefore = CollectionPoint(position = Position(0L, 0L))
+            val typeBefore = CollectionPoint(position = Position(0.0, 0.0))
 
             val typeSerialized = typeBefore.toJson()
             typeSerialized.shouldBeInstanceOf<JsonObject>()

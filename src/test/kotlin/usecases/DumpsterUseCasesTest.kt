@@ -5,7 +5,7 @@ import io.kotest.assertions.timing.eventually
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
-import swc.controllers.errors.DumpsterNotFoundException
+import swc.controllers.api.errors.DumpsterNotFoundException
 import swc.entities.CollectionPoint
 import swc.entities.Dumpster
 import swc.entities.Position
@@ -20,6 +20,7 @@ import swc.usecases.dumpster.GetDumpsterByIdUseCase
 import swc.usecases.dumpster.GetDumpstersUseCase
 import swc.usecases.dumpster.OpenDumpsterUseCase
 import swc.usecases.dumpster.UpdateDumpsterVolumeUseCase
+import swc.usecases.dumpster.UpdateDumpsterWorkingUseCase
 import kotlin.time.Duration.Companion.milliseconds
 
 class DumpsterUseCasesTest : DescribeSpec({
@@ -41,10 +42,10 @@ class DumpsterUseCasesTest : DescribeSpec({
     describe("A CreateDumpsterUseCase") {
         it("should create a new dumpster digital twin") {
             val dumpster = Dumpster.from(500.0, WasteName.ORGANIC)
-            val cp = CollectionPoint(position = Position(0L, 0L))
+            val cp = CollectionPoint(position = Position(0.0, 0.0))
 
             CreateCollectionPointUseCase(cp).execute()
-            CreateDumpsterUseCase(dumpster, cp).execute() shouldBe dumpster
+            CreateDumpsterUseCase(dumpster, cp.id).execute() shouldBe dumpster
 
             deleteInstances(dumpster, cp)
         }
@@ -53,10 +54,10 @@ class DumpsterUseCasesTest : DescribeSpec({
     describe("A OpenDumpsterUseCase") {
         it("should modify the Open property of an available dumpster on Azure Platform") {
             val dumpster = Dumpster.from(500.0, WasteName.ORGANIC)
-            val cp = CollectionPoint(position = Position(0L, 0L))
+            val cp = CollectionPoint(position = Position(0.0, 0.0))
 
             CreateCollectionPointUseCase(cp).execute()
-            val res = CreateDumpsterUseCase(dumpster, cp).execute()
+            val res = CreateDumpsterUseCase(dumpster, cp.id).execute()
             res.isOpen shouldBe false
 
             OpenDumpsterUseCase(dumpster.id).execute().isOpen shouldBe true
@@ -67,10 +68,10 @@ class DumpsterUseCasesTest : DescribeSpec({
         it("should not modify the Open property of a non-available dumpster on Azure Platform") {
             val dumpster = Dumpster.from(500.0, WasteName.ORGANIC)
             dumpster.occupiedVolume = Volume(499.0)
-            val cp = CollectionPoint(position = Position(0L, 0L))
+            val cp = CollectionPoint(position = Position(0.0, 0.0))
 
             CreateCollectionPointUseCase(cp).execute()
-            CreateDumpsterUseCase(dumpster, cp).execute()
+            CreateDumpsterUseCase(dumpster, cp.id).execute()
 
             OpenDumpsterUseCase(dumpster.id).execute().isOpen shouldBe false
 
@@ -80,10 +81,10 @@ class DumpsterUseCasesTest : DescribeSpec({
         it("should close the dumpster after timeout") {
             val timeout: Long = 5000
             val dumpster = Dumpster.from(1450.0, WasteName.PAPER)
-            val cp = CollectionPoint(position = Position(0L, 0L))
+            val cp = CollectionPoint(position = Position(0.0, 0.0))
 
             CreateCollectionPointUseCase(cp).execute()
-            CreateDumpsterUseCase(dumpster, cp).execute()
+            CreateDumpsterUseCase(dumpster, cp.id).execute()
             OpenDumpsterUseCase(dumpster.id, timeout).execute()
             GetDumpsterByIdUseCase(dumpster.id).execute().isOpen shouldBe true
 
@@ -105,10 +106,10 @@ class DumpsterUseCasesTest : DescribeSpec({
     describe("DeleteDumpsterUseCase") {
         it("should delete the desired digital twin from Azure Platform") {
             val dumpster = Dumpster.from(500.0, WasteName.ORGANIC)
-            val cp = CollectionPoint(position = Position(0L, 0L))
+            val cp = CollectionPoint(position = Position(0.0, 0.0))
 
             CreateCollectionPointUseCase(cp).execute()
-            CreateDumpsterUseCase(dumpster, cp).execute() shouldBe dumpster
+            CreateDumpsterUseCase(dumpster, cp.id).execute() shouldBe dumpster
 
             deleteInstances(dumpster, cp)
             val exception = shouldThrow<DumpsterNotFoundException> {
@@ -122,10 +123,10 @@ class DumpsterUseCasesTest : DescribeSpec({
         it("should close the dumpster") {
             val dumpster = Dumpster.from(1450.0, WasteName.PAPER)
             dumpster.isOpen = true
-            val cp = CollectionPoint(position = Position(0L, 0L))
+            val cp = CollectionPoint(position = Position(0.0, 0.0))
 
             CreateCollectionPointUseCase(cp).execute()
-            CreateDumpsterUseCase(dumpster, cp).execute()
+            CreateDumpsterUseCase(dumpster, cp.id).execute()
             CloseDumpsterUseCase(dumpster.id).execute()
 
             GetDumpsterByIdUseCase(dumpster.id).execute().isOpen shouldBe false
@@ -138,13 +139,28 @@ class DumpsterUseCasesTest : DescribeSpec({
         it("should update dumpster's volume") {
             val newVolume = 500.0
             val dumpster = Dumpster.from(1450.0, WasteName.PAPER)
-            val cp = CollectionPoint(position = Position(0L, 0L))
+            val cp = CollectionPoint(position = Position(0.0, 0.0))
 
             CreateCollectionPointUseCase(cp).execute()
-            CreateDumpsterUseCase(dumpster, cp).execute()
+            CreateDumpsterUseCase(dumpster, cp.id).execute()
             UpdateDumpsterVolumeUseCase(dumpster.id, newVolume).execute()
 
             GetDumpsterByIdUseCase(dumpster.id).execute().occupiedVolume.value shouldBe newVolume
+
+            deleteInstances(dumpster, cp)
+        }
+    }
+
+    describe("UpdateDumpsterWorkingUseCase") {
+        it("should update dumpster's volume") {
+            val newVolume = 500.0
+            val dumpster = Dumpster.from(1450.0, WasteName.PAPER)
+            val cp = CollectionPoint(position = Position(0.0, 0.0))
+
+            CreateCollectionPointUseCase(cp).execute()
+            CreateDumpsterUseCase(dumpster, cp.id).execute()
+
+            UpdateDumpsterWorkingUseCase(dumpster.id, false).execute().isWorking shouldBe false
 
             deleteInstances(dumpster, cp)
         }

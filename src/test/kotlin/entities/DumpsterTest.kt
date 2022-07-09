@@ -155,7 +155,7 @@ class DumpsterTest : DescribeSpec({
 
             dumpster.isOpen shouldBe false
             dumpster.isWorking shouldBe true
-            dumpster.type shouldBe DumpsterType.from(value, WasteName.GLASS)
+            dumpster.dumpsterType shouldBe DumpsterType.from(value, WasteName.GLASS)
             dumpster.occupiedVolume shouldBe Volume()
         }
 

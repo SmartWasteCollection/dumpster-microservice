@@ -1,7 +1,7 @@
 package swc.adapters
 
 import com.google.gson.JsonObject
-import swc.controllers.AzureConstants
+import swc.controllers.azure.AzureConstants
 import swc.entities.CollectionPoint
 import swc.entities.Position
 
@@ -27,12 +27,12 @@ object CollectionPointsSerialization {
 
 object CollectionPointsDeserialization {
     fun JsonObject.toCollectionPoint() = CollectionPoint(
-        this[DigitalTwinPropertyNames.DTID].asString,
+        (this["id"] ?: this[DigitalTwinPropertyNames.DTID]).asString,
         this.getAsJsonObject(CollectionPointsPropertyNames.POSITION).toPosition(),
     )
 
     private fun JsonObject.toPosition() = Position(
-        this.getAsJsonPrimitive(CollectionPointsPropertyNames.LATITUDE).asLong,
-        this.getAsJsonPrimitive(CollectionPointsPropertyNames.LONGITUDE).asLong,
+        this.getAsJsonPrimitive(CollectionPointsPropertyNames.LATITUDE).asDouble,
+        this.getAsJsonPrimitive(CollectionPointsPropertyNames.LONGITUDE).asDouble,
     )
 }

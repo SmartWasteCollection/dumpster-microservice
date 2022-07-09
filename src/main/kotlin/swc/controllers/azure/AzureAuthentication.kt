@@ -1,4 +1,4 @@
-package swc.controllers
+package swc.controllers.azure
 
 import com.azure.core.credential.TokenCredential
 import com.azure.digitaltwins.core.DigitalTwinsClient
