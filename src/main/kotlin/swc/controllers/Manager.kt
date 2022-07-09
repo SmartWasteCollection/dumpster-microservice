@@ -11,7 +11,6 @@ interface Manager {
     fun closeDumpster(id: String)
     fun deleteDumpster(id: String)
     fun closeAfterTimeout(id: String, timeout: Long)
-    fun calculateNextDumpsterId(): String
     fun updateVolume(id: String, newVolume: Double)
     fun createCollectionPoint(collectionPoint: CollectionPoint): CollectionPoint
     fun deleteCollectionPoint(id: String)
@@ -19,5 +18,5 @@ interface Manager {
     fun getDumpstersInCollectionPoint(id: String): List<Dumpster>
     fun getCollectionPointFromDumpsterId(id: String): String
     fun getCollectionPoints(): List<CollectionPoint>
-    fun calculateNextCollectionPointId(): String
+    fun updateDumpsterWorking(id: String, working: Boolean)
 }

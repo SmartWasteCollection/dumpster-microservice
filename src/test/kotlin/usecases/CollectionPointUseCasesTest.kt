@@ -4,10 +4,8 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.collections.shouldBeIn
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.types.shouldBeInstanceOf
 import swc.controllers.api.errors.CollectionPointNotFoundException
-import swc.controllers.azure.AzureDTManager
 import swc.entities.CollectionPoint
 import swc.entities.Dumpster
 import swc.entities.Position
@@ -84,14 +82,6 @@ class CollectionPointUseCasesTest : DescribeSpec({
         it("should return a list of CollectionPoints") {
             val list = GetCollectionPointsUseCase().execute()
             list.shouldBeInstanceOf<List<Dumpster>>()
-        }
-    }
-
-    describe("Generation of new Collection Point ID") {
-        it("should be a correctly formatted string") {
-            val newId = AzureDTManager.calculateNextCollectionPointId()
-            newId.shouldBeInstanceOf<String>()
-            newId shouldContain("CollectionPoint[0-9]+".toRegex())
         }
     }
 })

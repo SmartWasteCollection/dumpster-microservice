@@ -3,7 +3,7 @@ package swc.entities
 import java.util.UUID
 
 data class Dumpster(
-    val id: String = UUID.randomUUID().toString(),
+    val id: String = "Dumpster-${UUID.randomUUID()}",
     val dumpsterType: DumpsterType,
     var isOpen: Boolean = false,
     var isWorking: Boolean = true,

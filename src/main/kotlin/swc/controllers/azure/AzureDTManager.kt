@@ -63,10 +63,6 @@ object AzureDTManager : Manager {
         closeDumpster(id)
     }
 
-    override fun calculateNextDumpsterId() = "Dumpster${
-    parse(AzureAuthentication.authClient.query(AzureQueries.GET_COUNT_DUMPSTER_QUERY, String::class.java).first())["COUNT"]
-    }"
-
     override fun updateVolume(id: String, newVolume: Double) = updateDigitalTwin(id, "/occupiedVolume", newVolume)
 
     override fun getDumpstersInCollectionPoint(id: String) =
@@ -80,9 +76,7 @@ object AzureDTManager : Manager {
         .query(AzureQueries.GET_ALL_CP_QUERY, String::class.java)
         .map { parse(it).toCollectionPoint() }
 
-    override fun calculateNextCollectionPointId() = "CollectionPoint${
-    parse(AzureAuthentication.authClient.query(AzureQueries.GET_COUNT_CP_QUERY, String::class.java).first())["COUNT"]
-    }"
+    override fun updateDumpsterWorking(id: String, working: Boolean) = updateDigitalTwin(id, "/working", working)
 
     private fun deleteDigitalTwin(id: String) = AzureAuthentication.authClient.deleteDigitalTwin(id)
 
