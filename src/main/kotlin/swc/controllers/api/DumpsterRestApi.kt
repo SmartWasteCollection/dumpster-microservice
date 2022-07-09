@@ -40,7 +40,6 @@ class DumpsterRestApi {
     }.let {
         val values = it.getAsJsonObject("dumpster")
         values["id"] ?: values.addProperty("id", AzureDTManager.calculateNextDumpsterId())
-        println(values)
         try {
             val dumpster = Dumpster.from(
                 values["id"].asString,
@@ -52,7 +51,6 @@ class DumpsterRestApi {
                 it.getAsJsonPrimitive("collectionPointId").asString
             ).execute()
         } catch (e: Exception) {
-            println(e.message)
             throw DumpsterCreationFormatException("Creation object is not formatted correctly")
         }
     }

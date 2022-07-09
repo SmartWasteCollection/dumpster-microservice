@@ -8,6 +8,6 @@ data class CollectionPoint(
 )
 
 data class Position(
-    val latitude: Long,
-    val longitude: Long,
+    val latitude: Double,
+    val longitude: Double,
 )

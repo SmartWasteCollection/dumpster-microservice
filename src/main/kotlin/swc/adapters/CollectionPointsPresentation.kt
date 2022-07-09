@@ -32,7 +32,7 @@ object CollectionPointsDeserialization {
     )
 
     private fun JsonObject.toPosition() = Position(
-        this.getAsJsonPrimitive(CollectionPointsPropertyNames.LATITUDE).asLong,
-        this.getAsJsonPrimitive(CollectionPointsPropertyNames.LONGITUDE).asLong,
+        this.getAsJsonPrimitive(CollectionPointsPropertyNames.LATITUDE).asDouble,
+        this.getAsJsonPrimitive(CollectionPointsPropertyNames.LONGITUDE).asDouble,
     )
 }
