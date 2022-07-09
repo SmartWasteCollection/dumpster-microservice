@@ -10,15 +10,32 @@ on:
       - 'README.md'
 
 jobs:
+  build-and-test:
+    uses: ./.github/workflows/build-and-test.yml
+    secrets: inherit
   release:
+    needs:
+      - build-and-test
     runs-on: ubuntu-latest
     steps:
       - name: Fetch sources
         uses: actions/checkout@v3.0.2
-
       - name: semver
         uses: anitvam/conventionalcommit-semantic-releasing@main
         with:
           token: ${{ secrets.PERSONAL_TOKEN }}
+      - name: Get tag
+        id: getTag
+        run: echo "::set-output name=tagVersion::$(git describe --tags --abbrev=0)"
+      - name: Container Registry Authentication
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and Push Docker Image
+        run: |
+          docker build . --tag ghcr.io/smartwastecollection/dumpster-microservice:${{ steps.getTag.outputs.tagVersion }}
+          docker push ghcr.io/smartwastecollection/dumpster-microservice:${{ steps.getTag.outputs.tagVersion }}
 
 
