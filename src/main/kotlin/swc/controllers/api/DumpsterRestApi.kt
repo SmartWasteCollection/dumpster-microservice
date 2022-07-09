@@ -40,12 +40,11 @@ class DumpsterRestApi {
     }.let {
         val values = it.getAsJsonObject("dumpster")
         try {
-            val dumpster = Dumpster.from(
-                values["capacity"].asDouble,
-                WasteName.valueOf(values["wasteName"].asString)
-            )
             CreateDumpsterUseCase(
-                dumpster,
+                Dumpster.from(
+                    values["capacity"].asDouble,
+                    WasteName.valueOf(values["wasteName"].asString)
+                ),
                 it.getAsJsonPrimitive("collectionPointId").asString
             ).execute()
         } catch (e: Exception) {
