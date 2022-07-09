@@ -8,7 +8,4 @@ open class DumpsterMicroservice
 
 fun main(args: Array<String>) {
     runApplication<DumpsterMicroservice>(*args)
-
-    /*
-    */
 }
