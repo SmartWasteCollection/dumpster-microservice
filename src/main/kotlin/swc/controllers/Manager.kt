@@ -19,4 +19,5 @@ interface Manager {
     fun getDumpstersInCollectionPoint(id: String): List<Dumpster>
     fun getCollectionPointFromDumpsterId(id: String): String
     fun getCollectionPoints(): List<CollectionPoint>
+    fun calculateNextCollectionPointId(): String
 }

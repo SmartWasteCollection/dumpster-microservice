@@ -10,11 +10,14 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import swc.adapters.DumpsterDeserialization.parse
-import swc.adapters.DumpsterDeserialization.toDumpster
+import swc.controllers.errors.DumpsterCreationFormatException
+import swc.entities.CollectionPoint
 import swc.entities.Dumpster
+import swc.entities.WasteName
 import swc.usecases.dumpster.CloseDumpsterUseCase
 import swc.usecases.dumpster.CreateDumpsterUseCase
 import swc.usecases.dumpster.DeleteDumpsterUseCase
+import swc.usecases.dumpster.GetCollectionPointFromDumpsterIdUseCase
 import swc.usecases.dumpster.GetDumpsterByIdUseCase
 import swc.usecases.dumpster.GetDumpstersUseCase
 import swc.usecases.dumpster.OpenDumpsterUseCase
@@ -33,13 +36,24 @@ class DumpsterRestApi {
 
     @PostMapping("/")
     fun createDumpster(@RequestBody body: String) = parse(body).apply {
-        val dumpster = this.getAsJsonObject("dumpster")
-        dumpster["id"] ?: dumpster.addProperty("id", AzureDTManager.calculateNextDumpsterId())
     }.let {
-        CreateDumpsterUseCase(
-            it.getAsJsonObject("dumpster").toDumpster(),
-            it.getAsJsonPrimitive("collectionPointId").asString
-        ).execute()
+        val values = it.getAsJsonObject("dumpster")
+        values["id"] ?: values.addProperty("id", AzureDTManager.calculateNextDumpsterId())
+        println(values)
+        try {
+            val dumpster = Dumpster.from(
+                values["id"].asString,
+                values["capacity"].asDouble,
+                WasteName.valueOf(values["wasteName"].asString)
+            )
+            CreateDumpsterUseCase(
+                dumpster,
+                it.getAsJsonPrimitive("collectionPointId").asString
+            ).execute()
+        } catch (e: Exception) {
+            println(e.message)
+            throw DumpsterCreationFormatException("Creation object is not formatted correctly")
+        }
     }
 
     @DeleteMapping("/{id}")
@@ -56,4 +70,8 @@ class DumpsterRestApi {
         id,
         parse(body).getAsJsonPrimitive("volume").asDouble,
     ).execute()
+
+    @GetMapping("/{id}/collectionpoint")
+    fun getCollectionPoint(@PathVariable id: String): CollectionPoint =
+        GetCollectionPointFromDumpsterIdUseCase(id).execute()
 }

@@ -13,10 +13,10 @@ import swc.entities.WasteName
 import swc.usecases.collectionpoint.CreateCollectionPointUseCase
 import swc.usecases.collectionpoint.DeleteCollectionPointUseCase
 import swc.usecases.collectionpoint.GetCollectionPointByIdUseCase
-import swc.usecases.collectionpoint.GetCollectionPointFromDumpsterIdUseCase
 import swc.usecases.collectionpoint.GetDumpstersInCollectionPointUseCase
 import swc.usecases.dumpster.CreateDumpsterUseCase
 import swc.usecases.dumpster.DeleteDumpsterUseCase
+import swc.usecases.dumpster.GetCollectionPointFromDumpsterIdUseCase
 import swc.usecases.dumpster.GetDumpstersUseCase
 
 class CollectionPointUseCasesTest : DescribeSpec({
