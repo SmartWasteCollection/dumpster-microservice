@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import swc.adapters.DumpsterDeserialization.parse
 import swc.controllers.api.errors.DumpsterCreationFormatException
-import swc.controllers.azure.AzureDTManager
 import swc.entities.CollectionPoint
 import swc.entities.Dumpster
 import swc.entities.WasteName
@@ -23,6 +22,7 @@ import swc.usecases.dumpster.GetDumpsterByIdUseCase
 import swc.usecases.dumpster.GetDumpstersUseCase
 import swc.usecases.dumpster.OpenDumpsterUseCase
 import swc.usecases.dumpster.UpdateDumpsterVolumeUseCase
+import swc.usecases.dumpster.UpdateDumpsterWorkingUseCase
 
 @RestController
 @CrossOrigin()
@@ -39,10 +39,8 @@ class DumpsterRestApi {
     fun createDumpster(@RequestBody body: String) = parse(body).apply {
     }.let {
         val values = it.getAsJsonObject("dumpster")
-        values["id"] ?: values.addProperty("id", AzureDTManager.calculateNextDumpsterId())
         try {
             val dumpster = Dumpster.from(
-                values["id"].asString,
                 values["capacity"].asDouble,
                 WasteName.valueOf(values["wasteName"].asString)
             )
@@ -73,4 +71,9 @@ class DumpsterRestApi {
     @GetMapping("/{id}/collectionpoint")
     fun getCollectionPoint(@PathVariable id: String): CollectionPoint =
         GetCollectionPointFromDumpsterIdUseCase(id).execute()
+
+    @PutMapping("/{id}/working")
+    fun updateDumpsterWorking(@PathVariable id: String, @RequestBody value: String): Dumpster = parse(value).let {
+        UpdateDumpsterWorkingUseCase(id, it["working"].asBoolean).execute()
+    }
 }

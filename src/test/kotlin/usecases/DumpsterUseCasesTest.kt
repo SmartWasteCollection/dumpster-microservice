@@ -4,10 +4,8 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.assertions.timing.eventually
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.types.shouldBeInstanceOf
 import swc.controllers.api.errors.DumpsterNotFoundException
-import swc.controllers.azure.AzureDTManager
 import swc.entities.CollectionPoint
 import swc.entities.Dumpster
 import swc.entities.Position
@@ -22,6 +20,7 @@ import swc.usecases.dumpster.GetDumpsterByIdUseCase
 import swc.usecases.dumpster.GetDumpstersUseCase
 import swc.usecases.dumpster.OpenDumpsterUseCase
 import swc.usecases.dumpster.UpdateDumpsterVolumeUseCase
+import swc.usecases.dumpster.UpdateDumpsterWorkingUseCase
 import kotlin.time.Duration.Companion.milliseconds
 
 class DumpsterUseCasesTest : DescribeSpec({
@@ -152,11 +151,18 @@ class DumpsterUseCasesTest : DescribeSpec({
         }
     }
 
-    describe("Generation of new Dumpster ID") {
-        it("should be a correctly formatted string") {
-            val newId = AzureDTManager.calculateNextDumpsterId()
-            newId.shouldBeInstanceOf<String>()
-            newId shouldContain("Dumpster[0-9]+".toRegex())
+    describe("UpdateDumpsterWorkingUseCase") {
+        it("should update dumpster's volume") {
+            val newVolume = 500.0
+            val dumpster = Dumpster.from(1450.0, WasteName.PAPER)
+            val cp = CollectionPoint(position = Position(0.0, 0.0))
+
+            CreateCollectionPointUseCase(cp).execute()
+            CreateDumpsterUseCase(dumpster, cp.id).execute()
+
+            UpdateDumpsterWorkingUseCase(dumpster.id, false).execute().isWorking shouldBe false
+
+            deleteInstances(dumpster, cp)
         }
     }
 })
