@@ -1,4 +1,4 @@
-package swc.controllers
+package swc.controllers.api
 
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import swc.adapters.CollectionPointsDeserialization.toCollectionPoint
 import swc.adapters.DumpsterDeserialization.parse
+import swc.controllers.azure.AzureDTManager
 import swc.entities.CollectionPoint
 import swc.entities.Dumpster
 import swc.usecases.collectionpoint.CreateCollectionPointUseCase

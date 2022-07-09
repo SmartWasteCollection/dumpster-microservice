@@ -1,4 +1,4 @@
-package swc.controllers
+package swc.controllers.azure
 
 import com.azure.digitaltwins.core.BasicRelationship
 import swc.entities.Dumpster

@@ -1,4 +1,4 @@
-package swc.controllers
+package swc.controllers.azure
 
 import com.azure.core.models.JsonPatchDocument
 import com.azure.digitaltwins.core.BasicRelationship
@@ -8,8 +8,9 @@ import swc.adapters.CollectionPointsSerialization.toJson
 import swc.adapters.DumpsterDeserialization.parse
 import swc.adapters.DumpsterDeserialization.toDumpster
 import swc.adapters.DumpsterSerialization.toJson
-import swc.controllers.errors.CollectionPointNotFoundException
-import swc.controllers.errors.DumpsterNotFoundException
+import swc.controllers.Manager
+import swc.controllers.api.errors.CollectionPointNotFoundException
+import swc.controllers.api.errors.DumpsterNotFoundException
 import swc.entities.CollectionPoint
 import swc.entities.Dumpster
 import java.util.concurrent.Executors

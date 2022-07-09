@@ -1,7 +1,7 @@
 package swc.adapters
 
 import com.google.gson.JsonObject
-import swc.controllers.AzureConstants
+import swc.controllers.azure.AzureConstants
 import swc.entities.CollectionPoint
 import swc.entities.Position
 

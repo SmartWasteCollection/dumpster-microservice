@@ -4,8 +4,10 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.collections.shouldBeIn
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.types.shouldBeInstanceOf
-import swc.controllers.errors.CollectionPointNotFoundException
+import swc.controllers.api.errors.CollectionPointNotFoundException
+import swc.controllers.azure.AzureDTManager
 import swc.entities.CollectionPoint
 import swc.entities.Dumpster
 import swc.entities.Position
@@ -13,11 +15,11 @@ import swc.entities.WasteName
 import swc.usecases.collectionpoint.CreateCollectionPointUseCase
 import swc.usecases.collectionpoint.DeleteCollectionPointUseCase
 import swc.usecases.collectionpoint.GetCollectionPointByIdUseCase
+import swc.usecases.collectionpoint.GetCollectionPointsUseCase
 import swc.usecases.collectionpoint.GetDumpstersInCollectionPointUseCase
 import swc.usecases.dumpster.CreateDumpsterUseCase
 import swc.usecases.dumpster.DeleteDumpsterUseCase
 import swc.usecases.dumpster.GetCollectionPointFromDumpsterIdUseCase
-import swc.usecases.dumpster.GetDumpstersUseCase
 
 class CollectionPointUseCasesTest : DescribeSpec({
     describe("CreateCollectionPointUseCase") {
@@ -73,15 +75,23 @@ class CollectionPointUseCasesTest : DescribeSpec({
             val res = GetCollectionPointFromDumpsterIdUseCase(dumpster1.id).execute()
             res shouldBe cp
 
-            DeleteDumpsterUseCase(dumpster1.id).execute()
             DeleteCollectionPointUseCase(cp.id).execute()
+            DeleteDumpsterUseCase(dumpster1.id).execute()
         }
     }
 
     describe("GetCollectionPointsUseCases") {
         it("should return a list of CollectionPoints") {
-            val list = GetDumpstersUseCase().execute()
+            val list = GetCollectionPointsUseCase().execute()
             list.shouldBeInstanceOf<List<Dumpster>>()
+        }
+    }
+
+    describe("Generation of new Collection Point ID") {
+        it("should be a correctly formatted string") {
+            val newId = AzureDTManager.calculateNextCollectionPointId()
+            newId.shouldBeInstanceOf<String>()
+            newId shouldContain("CollectionPoint[0-9]+".toRegex())
         }
     }
 })

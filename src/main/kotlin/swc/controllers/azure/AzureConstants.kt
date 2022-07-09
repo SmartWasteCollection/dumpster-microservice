@@ -1,4 +1,4 @@
-package swc.controllers
+package swc.controllers.azure
 
 object AzureConstants {
     const val DUMPSTER_DT_MODEL_ID = "dtmi:swc:Dumpster;1"

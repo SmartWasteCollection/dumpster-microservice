@@ -1,4 +1,4 @@
-package swc.controllers
+package swc.controllers.azure
 
 object AzureQueries {
     private const val IS_DUMPSTER_DT_CONDITION = "WHERE IS_OF_MODEL('${AzureConstants.DUMPSTER_DT_MODEL_ID}')"
