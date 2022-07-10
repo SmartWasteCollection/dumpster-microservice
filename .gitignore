@@ -3,6 +3,7 @@
 
 # IDEA files
 .idea
+.env 
 
 # Compiled class file
 *.class
