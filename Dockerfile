@@ -1,6 +1,14 @@
 FROM mcr.microsoft.com/azure-cli:latest
-COPY ../ /dumpster-microservice/
+COPY ./ /dumpster-microservice/
 WORKDIR /dumpster-microservice/
+
+ARG service
+ARG secret
+ARG tenant
+
+ENV AZURE_SERVICE_PRINCIPAL_NAME=$service
+ENV AZURE_SECRET=$secret
+ENV AZURE_TENANT=$tenant
 
 EXPOSE 8080
 EXPOSE 27017
