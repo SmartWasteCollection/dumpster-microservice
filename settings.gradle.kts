@@ -1,5 +1,5 @@
 plugins {
-    id("org.danilopianini.gradle-pre-commit-git-hooks") version "1.0.12"
+    id("org.danilopianini.gradle-pre-commit-git-hooks") version "1.0.14"
 }
 
 rootProject.name = "dumpster-microservice"
