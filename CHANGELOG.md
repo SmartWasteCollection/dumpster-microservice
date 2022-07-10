@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/SmartWasteCollection/dumpster-microservice/compare/v1.0.0...v1.0.1) (2022-07-10)
+
+
+### Bug Fixes
+
+* add azure configuration for docker container ([2fb8635](https://github.com/SmartWasteCollection/dumpster-microservice/commit/2fb863515accfcef9e3cba20a71a434d5dc5bd47))
+
 # 1.0.0 (2022-07-09)
 
 
