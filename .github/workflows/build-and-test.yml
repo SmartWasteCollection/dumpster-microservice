@@ -5,6 +5,11 @@ on:
   workflow_call:
   pull_request:
   push:
+    paths-ignore:
+      - 'CHANGELOG.md'
+      - 'LICENSE'
+      - 'README.md'
+      - 'renovate.json'
 
 jobs:
   build-and-test:

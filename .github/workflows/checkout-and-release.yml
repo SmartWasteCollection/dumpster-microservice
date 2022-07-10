@@ -33,6 +33,9 @@ jobs:
     steps:
       - name: Fetch sources
         uses: actions/checkout@v3.0.2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
       - name: Get tag
         id: getTag
         run: echo "::set-output name=tagVersion::$(git describe --tags --abbrev=0)"
