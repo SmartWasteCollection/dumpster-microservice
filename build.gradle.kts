@@ -20,7 +20,7 @@ dependencies {
     implementation("com.azure:azure-digitaltwins-core:1.2.4")
     implementation("com.azure:azure-identity:1.5.3")
     implementation("com.google.code.gson:gson:2.9.0")
-    implementation("org.springframework.boot:spring-boot-starter-web:2.7.0")
+    implementation("org.springframework.boot:spring-boot-starter-web:2.7.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.3")
 }
 
