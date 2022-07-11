@@ -5,14 +5,13 @@
 This repository contains the microservice that handles the generation and management of Collection Points and Dumpsters digital twins.
 
 ## Usage
-
-To use this microservice you can download the latest release and launch it with
+You can run the microservice using a docker container with the command
 ```
-./gradlew bootRun
-```
-
-Or you can download the latest package and launch it with the command
-```
-docker run -p 3000:8080 -it ghcr.io/smartwastecollection/dumpster-microservice:<latest-tag>
+docker run -p 3000:8080 --env-file .env -it ghcr.io/smartwastecollection/dumpster-microservice:<latest-tag>
 ```
 > Note: You can remove `-it` flags and use `-d` to launch it as a daemon
+
+The `.env` file **must** contain the secrets needed to perform the login into the azure cloud platform:
+1. `AZURE_SERVICE_PRINCIPAL_NAME`: UUID that represents the Application (client) ID of the _Service Principal_
+2. `AZURE_SECRET`: UUID that identifies the secret used to perform the login from the _Service Principal_  
+3. `AZURE_TENANT`: UUID that identifies the Directory (tenant) ID of the _Service Principal_
