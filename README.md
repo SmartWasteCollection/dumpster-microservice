@@ -1,6 +1,12 @@
 # dumpster-microservice
 
-![build](https://img.shields.io/github/workflow/status/SmartWasteCollection/dumpster-microservice/Build%20and%20Test) [![codecov](https://codecov.io/gh/SmartWasteCollection/dumpster-microservice/branch/main/graph/badge.svg?token=AGJH4U1WOG)](https://codecov.io/gh/SmartWasteCollection/dumpster-microservice) ![GitHub](https://img.shields.io/github/license/SmartWasteCollection/dumpster-microservice)
+[![Continuous Integration](https://github.com/SmartWasteCollection/dumpster-microservice/actions/workflows/build-and-test.yml/badge.svg?event=push)](https://github.com/SmartWasteCollection/dumpster-microservice/actions/workflows/build-and-test.yml)
+[![Continuous Integration](https://github.com/SmartWasteCollection/dumpster-microservice/actions/workflows/checkout-and-release.yml/badge.svg?event=push)](https://github.com/SmartWasteCollection/dumpster-microservice/actions/workflows/checkout-and-release.yml)
+[![GitHub issues](https://img.shields.io/github/issues-raw/SmartWasteCollection/dumpster-microservice?style=plastic)](https://github.com/SmartWasteCollection/dumpster-microservice/issues)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr-raw/SmartWasteCollection/dumpster-microservice?style=plastic)](https://github.com/SmartWasteCollection/dumpster-microservice/pulls)
+[![GitHub](https://img.shields.io/github/license/SmartWasteCollection/dumpster-microservice?style=plastic)](/LICENSE)
+[![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/SmartWasteCollection/dumpster-microservice?include_prereleases&style=plastic)](https://github.com/SmartWasteCollection/dumpster-microservice/releases)
+[![codecov](https://codecov.io/gh/SmartWasteCollection/dumpster-microservice/branch/main/graph/badge.svg?token=DFXD6WEUFK)](https://codecov.io/gh/SmartWasteCollection/dumpster-microservice)
 
 This repository contains the microservice that handles the generation and management of Collection Points and Dumpsters digital twins.
 
