@@ -1,3 +1,10 @@
+## [1.0.11](https://github.com/SmartWasteCollection/dumpster-microservice/compare/v1.0.10...v1.0.11) (2022-08-13)
+
+
+### Bug Fixes
+
+* **deps:** update dependency com.azure:azure-digitaltwins-core to v1.3.1 ([47a597e](https://github.com/SmartWasteCollection/dumpster-microservice/commit/47a597e6d4f02cb79eea207f5ae668d4e960b5ac))
+
 ## [1.0.10](https://github.com/SmartWasteCollection/dumpster-microservice/compare/v1.0.9...v1.0.10) (2022-08-11)
 
 
