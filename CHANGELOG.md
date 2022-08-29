@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/SmartWasteCollection/dumpster-microservice/compare/v1.1.0...v1.1.1) (2022-08-29)
+
+
+### Bug Fixes
+
+* update collection point's api definition ([b9984f1](https://github.com/SmartWasteCollection/dumpster-microservice/commit/b9984f10f2e47585869997ab3216ff463f6ebde8))
+
 # [1.1.0](https://github.com/SmartWasteCollection/dumpster-microservice/compare/v1.0.12...v1.1.0) (2022-08-29)
 
 
