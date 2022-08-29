@@ -1,3 +1,11 @@
+# [1.1.0](https://github.com/SmartWasteCollection/dumpster-microservice/compare/v1.0.12...v1.1.0) (2022-08-29)
+
+
+### Features
+
+* remove useless prop in Dumpster ([07f241d](https://github.com/SmartWasteCollection/dumpster-microservice/commit/07f241d0cecbb0c486c48d586a24013ac21a3f4f))
+* update rest definition of dumpster's apis ([81b2583](https://github.com/SmartWasteCollection/dumpster-microservice/commit/81b258398b66a35e778bf987a09f25c30c6588a0))
+
 ## [1.0.12](https://github.com/SmartWasteCollection/dumpster-microservice/compare/v1.0.11...v1.0.12) (2022-08-18)
 
 
