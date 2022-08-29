@@ -30,7 +30,7 @@ class CollectionPointRestApi {
     @GetMapping("/{id}")
     fun getCollectionPointById(@PathVariable id: String): CollectionPoint = GetCollectionPointByIdUseCase(id).execute()
 
-    @PostMapping("/")
+    @PostMapping
     fun createCollectionPoint(@RequestBody body: String) = parse(body).let {
         try {
             val collectionPoint = CollectionPoint(
