@@ -35,7 +35,7 @@ class DumpsterRestApi {
     @GetMapping("/{id}")
     fun getDumpsterById(@PathVariable id: String): Dumpster = GetDumpsterByIdUseCase(id).execute()
 
-    @PostMapping("/")
+    @PostMapping
     fun createDumpster(@RequestBody body: String) = parse(body).apply {
     }.let {
         val values = it.getAsJsonObject("dumpster")
