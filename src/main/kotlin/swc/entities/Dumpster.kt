@@ -8,7 +8,6 @@ data class Dumpster(
     var isOpen: Boolean = false,
     var isWorking: Boolean = true,
     var occupiedVolume: Volume = Volume(),
-    val occupiedPercentage: Double = occupiedVolume.getOccupiedPercentage(dumpsterType.size.capacity),
 ) {
     companion object {
         const val CAPACITY_THRESHOLD = 95
