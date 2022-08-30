@@ -23,4 +23,4 @@ The `.env` file **must** contain the secrets needed to perform the login into th
 3. `AZURE_TENANT`: UUID that identifies the Directory (tenant) ID of the _Service Principal_
 
 ## Usage
-Detailed description about the API [here](https://app.swaggerhub.com/apis/anitvam/dumpster_microservice_api/1.0.0)
+Detailed description about the API [here](https://app.swaggerhub.com/apis/anitvam/dumpster_microservice_api/v1.1.0)
