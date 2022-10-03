@@ -1,3 +1,10 @@
+## [1.1.5](https://github.com/SmartWasteCollection/dumpster-microservice/compare/v1.1.4...v1.1.5) (2022-10-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency io.kotest:kotest-property to v5.5.0 ([bb4d021](https://github.com/SmartWasteCollection/dumpster-microservice/commit/bb4d02111d0be0dcc5e94e42a51ebd2f5089d8c7))
+
 ## [1.1.4](https://github.com/SmartWasteCollection/dumpster-microservice/compare/v1.1.3...v1.1.4) (2022-10-03)
 
 
