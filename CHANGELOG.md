@@ -1,3 +1,10 @@
+## [1.1.15](https://github.com/SmartWasteCollection/dumpster-microservice/compare/v1.1.14...v1.1.15) (2022-10-25)
+
+
+### Bug Fixes
+
+* **deps:** update dependency com.google.code.gson:gson to v2.10 ([c7478c6](https://github.com/SmartWasteCollection/dumpster-microservice/commit/c7478c6aa886535e3b0cb8a68f35df564214cb85))
+
 ## [1.1.14](https://github.com/SmartWasteCollection/dumpster-microservice/compare/v1.1.13...v1.1.14) (2022-10-24)
 
 
