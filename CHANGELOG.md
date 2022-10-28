@@ -1,3 +1,10 @@
+## [1.1.16](https://github.com/SmartWasteCollection/dumpster-microservice/compare/v1.1.15...v1.1.16) (2022-10-28)
+
+
+### Bug Fixes
+
+* **deps:** update dependency io.kotest:kotest-assertions-core to v5.5.3 ([27c5de3](https://github.com/SmartWasteCollection/dumpster-microservice/commit/27c5de3340881b61dcd0dd65ebd614109c646b3c))
+
 ## [1.1.15](https://github.com/SmartWasteCollection/dumpster-microservice/compare/v1.1.14...v1.1.15) (2022-10-25)
 
 
