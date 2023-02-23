@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm") version "1.8.10"
-    id("org.springframework.boot") version "2.7.8"
+    id("org.springframework.boot") version "2.7.9"
     id("org.jlleitschuh.gradle.ktlint") version "11.1.0"
     id("org.jlleitschuh.gradle.ktlint-idea") version "11.1.0"
     jacoco
@@ -20,7 +20,7 @@ dependencies {
     implementation("com.azure:azure-digitaltwins-core:1.3.6")
     implementation("com.azure:azure-identity:1.5.3")
     implementation("com.google.code.gson:gson:2.10.1")
-    implementation("org.springframework.boot:spring-boot-starter-web:2.7.8")
+    implementation("org.springframework.boot:spring-boot-starter-web:2.7.9")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 }
 
