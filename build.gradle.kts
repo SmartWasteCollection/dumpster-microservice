@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.8.20"
+    kotlin("jvm") version "1.8.21"
     id("org.springframework.boot") version "2.7.11"
     id("org.jlleitschuh.gradle.ktlint") version "11.1.0"
     id("org.jlleitschuh.gradle.ktlint-idea") version "11.1.0"
