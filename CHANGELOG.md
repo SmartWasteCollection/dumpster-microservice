@@ -1,3 +1,10 @@
+## [1.1.45](https://github.com/SmartWasteCollection/dumpster-microservice/compare/v1.1.44...v1.1.45) (2023-04-26)
+
+
+### Bug Fixes
+
+* **deps:** update dependency jacoco to v0.8.10 ([94a48e3](https://github.com/SmartWasteCollection/dumpster-microservice/commit/94a48e3c42c955fbf8bb36ad456bd1cf288123b1))
+
 ## [1.1.44](https://github.com/SmartWasteCollection/dumpster-microservice/compare/v1.1.43...v1.1.44) (2023-04-20)
 
 
