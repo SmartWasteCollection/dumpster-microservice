@@ -1,3 +1,10 @@
+## [1.1.49](https://github.com/SmartWasteCollection/dumpster-microservice/compare/v1.1.48...v1.1.49) (2023-05-11)
+
+
+### Bug Fixes
+
+* **deps:** update dependency io.kotest:kotest-runner-junit5 to v5.6.2 ([3fe25b1](https://github.com/SmartWasteCollection/dumpster-microservice/commit/3fe25b1a398e06c6581a35d2268e2ceb33227306))
+
 ## [1.1.48](https://github.com/SmartWasteCollection/dumpster-microservice/compare/v1.1.47...v1.1.48) (2023-05-11)
 
 
