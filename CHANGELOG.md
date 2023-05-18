@@ -1,3 +1,10 @@
+## [1.1.51](https://github.com/SmartWasteCollection/dumpster-microservice/compare/v1.1.50...v1.1.51) (2023-05-18)
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.jetbrains.kotlinx:kotlinx-coroutines-android to v1.7.1 ([96428b9](https://github.com/SmartWasteCollection/dumpster-microservice/commit/96428b96a41160ffc0fe8eb786adedddc1dfa903))
+
 ## [1.1.50](https://github.com/SmartWasteCollection/dumpster-microservice/compare/v1.1.49...v1.1.50) (2023-05-18)
 
 
