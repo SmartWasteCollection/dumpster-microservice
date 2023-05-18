@@ -1,3 +1,10 @@
+## [1.1.50](https://github.com/SmartWasteCollection/dumpster-microservice/compare/v1.1.49...v1.1.50) (2023-05-18)
+
+
+### Bug Fixes
+
+* **deps:** update spring boot to v2.7.12 ([39913b6](https://github.com/SmartWasteCollection/dumpster-microservice/commit/39913b61d37cb92c4e46ac0058d3185fdacbbe97))
+
 ## [1.1.49](https://github.com/SmartWasteCollection/dumpster-microservice/compare/v1.1.48...v1.1.49) (2023-05-11)
 
 
