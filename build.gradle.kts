@@ -18,7 +18,7 @@ dependencies {
     testImplementation("io.kotest:kotest-assertions-core:5.6.2")
     testImplementation("io.kotest:kotest-property:5.6.2")
     implementation("com.azure:azure-digitaltwins-core:1.3.9")
-    implementation("com.azure:azure-identity:1.5.3")
+    implementation("com.azure:azure-identity:1.5.5")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("org.springframework.boot:spring-boot-starter-web:2.7.12")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
